@@ -408,7 +408,63 @@ $('#toc').on('click', 'a', function() {
 
     
 
-   <p>Add information on the VASP calculations.</p>
+   <p>The following VASP calculations are needed for a capture calculation:</p>
+<ul>
+  <li>relaxed perfect crystal (plus SCF after)</li>
+  <li>relaxed final charge state (plus SCF after)</li>
+  <li>relaxed initial charge state (plus SCF after)</li>
+  <li>SCF for final charge state in initial positions</li>
+</ul>
+
+<p>The displacement between the initial- and final-charge-state relaxed positions gives the $\Delta q_j$ that determines how the electronic energy is split into the different phonon modes. It is recommended to extract the energies (using <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a>) from the ground-state system in the initial relaxed positions. The wave functions are only needed from the perfect crystal and final charge state/initial positions.</p>
+
+<p>The wave functions and energies are extracted using <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a>. For any calculations where only the final positions are needed, it is not required to do an SCF calculation after or to run <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a>.</p>
+
+<h2 id="recommended-order">Recommended order</h2>
+
+<p>To run the VASP calculations, you must set up your perfect-crystal and defect-crystal supercells. The recommended order for this is</p>
+<ul>
+  <li>volume relax the unit cell</li>
+  <li>scale up to supercell</li>
+  <li>relax inner degrees of freedom (DOF) for pristine supercell (plus SCF after)</li>
+  <li>introduce your defect in the middle of the supercell</li>
+  <li>relax inner DOF for defect supercell in ground state</li>
+  <li>rest of VASP defect calculations to get all wave functions and positions needed</li>
+</ul>
+
+<p>It is recommended to start with the ground state of the defect supercell because it is easiest to converge. The <code class="language-plaintext highlighter-rouge">CONTCAR</code>, <code class="language-plaintext highlighter-rouge">WAVECAR</code>, and <code class="language-plaintext highlighter-rouge">CHGCAR</code> from the ground-state relaxation can be used as a starting point for the rest of the defect calculations.</p>
+
+<p>If you are using more than 1 k-point with a large supercell, it is recommended to</p>
+<ul>
+  <li>relax at gamma (if relaxation needed)</li>
+  <li>SCF at gamma</li>
+  <li>NSCF at full k-point grid (<code class="language-plaintext highlighter-rouge">ICHARG=11</code>)</li>
+</ul>
+
+<p>For HSE calculations, start from a preconverged PBE calculation for speed. The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> code is not currently implemented for the gamma-only version of VASP, except for exporting the energies only, so keep that in mind when running HSE calculations especially. If you do use the gamma-only version to get accurate HSE energies, make sure that your preconverged PBE calculation was run using the gamma-only version as well, otherwise you will get an error saying <code class="language-plaintext highlighter-rouge">plane wave coefficients changed</code>.</p>
+
+<h2 id="parameters">Parameters</h2>
+
+<h3 id="ediff"><a href="https://www.vasp.at/wiki/index.php/EDIFF" target="_blank"><code class="language-plaintext highlighter-rouge">EDIFF</code></a></h3>
+
+<p>For the relaxations, it is okay to use a looser <code class="language-plaintext highlighter-rouge">EDIFF</code> like <code class="language-plaintext highlighter-rouge">1e-5</code>, but we use the wave functions from the SCF calculations, so the convergence criteria must be tighter for those. We have used <code class="language-plaintext highlighter-rouge">1e-8</code> in the past. To ensure that your convergence is tight enough, run the <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code with the same system input for both <code class="language-plaintext highlighter-rouge">PC</code> and <code class="language-plaintext highlighter-rouge">SD</code> and a small set of bands used for the initial state and final state. Check the <code class="language-plaintext highlighter-rouge">|&lt;f|i&gt;|^2</code> column in the <code class="language-plaintext highlighter-rouge">allElecOverlap.*.*</code> file to ensure that the bands are orthonormal. For the same initial and final band, the overlap should be close to 1. For different initial and final bands, the overlap should be close to zero (<code class="language-plaintext highlighter-rouge">~1e-10</code> is usually good).</p>
+
+<h3 id="nbands"><a href="https://www.vasp.at/wiki/index.php/NBANDS" target="_blank"><code class="language-plaintext highlighter-rouge">NBANDS</code></a></h3>
+
+<p>From the VASP wiki:</p>
+<blockquote>
+  <p>In the electronic minimization calculations, empty states do not contribute to the total energy, however, empty states are required to achieve a better convergence.</p>
+</blockquote>
+
+<p>The default setting in VASP already includes extra bands above the filled states to get better convergence; however, we need accurate calculations of both occupied and unoccupied states when considering electron capture. For electron capture, ensure that <code class="language-plaintext highlighter-rouge">NBANDS</code> is set so that there are plenty empty bands <em>above the empty states that you are using for your initial electron states.</em> The default value from VASP is <code class="language-plaintext highlighter-rouge">NELECT/2+NIONS/2</code>. You should at least increase above the default by the number of unoccupied states that you need.</p>
+
+<h3 id="isym"><a href="https://www.vasp.at/wiki/index.php/ISYM" target="_blank"><code class="language-plaintext highlighter-rouge">ISYM</code></a></h3>
+
+<p>Our code is not currently implemented with symmetrization, so symmetry must be completely turned off with <code class="language-plaintext highlighter-rouge">ISYM=-1</code>.</p>
+
+<h3 id="ispin"><a href="https://www.vasp.at/wiki/index.php/ISPIN" target="_blank"><code class="language-plaintext highlighter-rouge">ISPIN</code></a></h3>
+
+<p>Make sure that the proper choice of <code class="language-plaintext highlighter-rouge">ISPIN</code> is used for each of your calculations. The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> and <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> codes handle spin polarization automatically, so it is not required to use the same setting for every system.</p>
 
 
 
