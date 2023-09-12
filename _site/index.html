@@ -252,7 +252,7 @@
           
           
           
-          <li><a title="VASP" href="calculations_vasp.html">VASP</a></li>
+          <li><a title="VASP" href="vasp.html">VASP</a></li>
           
           
           
@@ -273,7 +273,7 @@
           
           
           
-          <li><a title="Phonons" href="calculations_phonons.html">Phonons</a></li>
+          <li><a title="Phonons" href="phonons.html">Phonons</a></li>
           
           
           
@@ -428,7 +428,7 @@ $('#toc').on('click', 'a', function() {
   <li>final charge state in initial positions</li>
 </ul>
 
-<p>See the [VASP][vasp] page to find details on how the calculations should be set up and the suggested order of running the calculations.</p>
+<p>See the <a href="vasp.html">VASP</a> page to find details on how the calculations should be set up and the suggested order of running the calculations.</p>
 
 <p>The results must then be post-processed by the <code class="language-plaintext highlighter-rouge">Export</code> code to be used as input to the other programs in the suite. Once the VASP results are exported, the raw files are not needed again. Some of the items exported are:</p>
 <ul>
@@ -451,7 +451,7 @@ $('#toc').on('click', 'a', function() {
 
 <p>The phonon post-processing code (<code class="language-plaintext highlighter-rouge">PhononPP</code>) is then used to generate positions shifted along each eigenvector (needed for the first-order matrix element) and the Huang-Rhys factor (needed for distributing the energy across the modes in the <code class="language-plaintext highlighter-rouge">LSF</code> code). <code class="language-plaintext highlighter-rouge">PhononPP</code> is currently set up to read the required information in the form of the <code class="language-plaintext highlighter-rouge">mesh.yaml</code> output by <code class="language-plaintext highlighter-rouge">Phonopy</code>.</p>
 
-<p>Check out the [Phonons][phonons] and <a href="calculations_phononpp.html"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> pages for guidance on running a phonon calculation with <code class="language-plaintext highlighter-rouge">Phonopy</code> and how to use <code class="language-plaintext highlighter-rouge">PhononPP</code>.</p>
+<p>Check out the <a href="phonons.html">Phonons</a> and <a href="calculations_phononpp.html"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> pages for guidance on running a phonon calculation with <code class="language-plaintext highlighter-rouge">Phonopy</code> and how to use <code class="language-plaintext highlighter-rouge">PhononPP</code>.</p>
 
 <h2 id="zeroth-order">Zeroth-order</h2>
 

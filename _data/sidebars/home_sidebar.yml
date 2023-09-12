@@ -41,7 +41,7 @@ entries:
     folderitems:
 
     - title: VASP
-      url: /calculations_vasp.html
+      url: /vasp.html
       output: web, pdf
 
     - title: Export
@@ -53,7 +53,7 @@ entries:
       output: web, pdf
 
     - title: Phonons
-      url: /calculations_phonons.html
+      url: /phonons.html
       output: web, pdf
 
     - title: PhononPP
