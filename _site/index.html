@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content="introduction,  homepage introduction">
+<title>Introduction | Defect Cross Sections</title>
+<link rel="stylesheet" href="css/syntax.css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="css/customstyles.css">
+<link rel="stylesheet" href="css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="css/theme-blue.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.2.0/anchor.min.js"></script>
+<script src="js/toc.js"></script>
+<script src="js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="images/favicon.ico">
+
+
+<script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="defectCrossSections" href="http://localhost:4000/feed.xml">
+
+
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> Defect Cross Sections</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button -->
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Show site nav</a></li>
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="https://github.com/laurarnichols/defectCrossSections" target="_blank" rel="noopener">GitHub</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Resources<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li><a href="https://www.vasp.at/wiki/index.php/The_VASP_Manual" target="_blank" rel="noopener">VASP Wiki</a></li>
+                        
+                        
+                        
+                        <li><a href="https://phonopy.github.io/phonopy/" target="_blank" rel="noopener">Phonopy Docs</a></li>
+                        
+                        
+                    </ul>
+                </li>
+                
+                
+                
+			<li>
+
+
+
+  <a class="email" title="Submit feedback" href="#" onclick="javascript:window.location='mailto:laurarnichols@gmail.com?subject=Defect Cross Sections feedback&body=I have some feedback about the Introduction page: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Need help?</a>
+
+</li>
+
+
+
+		
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Introduction">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
+        
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle">Defect Cross Sections 0.0</li>
+  
+  
+  
+      
+  
+  <li>
+      <a title="Overview" href="#">Overview</a>
+      <ul>
+          
+          
+          
+          <li class="active"><a title="Introduction" href="index.html">Introduction</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Getting started" href="getting-started.html">Getting started</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Theory" href="theory.html">Theory</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Calculations" href="#">Calculations</a>
+      <ul>
+          
+          
+          
+          <li><a title="VASP" href="calculations_vasp.html">VASP</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Export" href="calculations_export.html">Export</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Energy tabulator" href="calculations_energy-tabulator.html">Energy tabulator</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Phonons" href="calculations_phonons.html">Phonons</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="PhononPP" href="calculations_phononpp.html">PhononPP</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="TME" href="calculations_tme.html">TME</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="LSF" href="calculations_lsf.html">LSF</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Code" href="#">Code</a>
+      <ul>
+          
+          
+          
+          <li><a title="Export" href="code_export.html">Export</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Energy tabulator" href="code_energy-tabulator.html">Energy tabulator</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="PhononPP" href="code_phononpp.html">PhononPP</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="TME" href="code_tme.html">TME</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="LSF" href="code_lsf.html">LSF</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+      
+      <!-- if you aren't using the accordion, uncomment this block:
+         <p class="external">
+             <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+         </p>
+         -->
+</ul>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+
+
+            </div>
+            
+        
+
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <div class="post-header">
+   <h1 class="post-title-main">Introduction</h1>
+</div>
+
+
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+
+});
+</script>
+
+<div id="toc"></div>
+
+
+
+    
+
+
+    
+
+   <h2 id="overview">Overview</h2>
+
+<p>This site provides the documentation for the Defect Cross Sections project. This code currently calculates the capture cross section for a defect in a semiconductor based on the <a href="theory.html">theory</a> developed in the Barmparis and GaN papers. There are codes to integrate with both VASP and QuantumEspresso, but <strong>only the VASP version is currently up-to-date</strong>.</p>
+
+<p>The flow chart for the full calculation may be overwhelming, but <em>stick with me</em>. It is important to get an overall understanding of how the code pieces together because there are so many moving parts. But before showing you the full flow chart, let’s start with a simple one:</p>
+
+<figure><img class="docimage" src="images/CaptureFlowChartSimple.png" alt="Simple capture flow chart" style="width: 40%; height: auto;" /></figure>
+
+<p><br /></p>
+
+<p>The basic process for running a capture calculation is to get all of the VASP calculations that you need done, run <code class="language-plaintext highlighter-rouge">Export</code> to translate the information into a form easily read by the rest of the code, calculate phonons, post-process the files to gather various energies needed and information about the phonons, then run <code class="language-plaintext highlighter-rouge">TME</code> and <code class="language-plaintext highlighter-rouge">LSF</code> for the zeroth- and first-order terms.</p>
+
+<h2 id="vasp-and-export-calculations">VASP and Export Calculations</h2>
+
+<p>The following VASP calculations are needed for a capture calculation:</p>
+<ul>
+  <li>relaxed perfect crystal (plus SCF after)</li>
+  <li>relaxed final charge state (plus SCF after)</li>
+  <li>relaxed initial charge state (plus SCF after)</li>
+  <li>final charge state in initial positions</li>
+</ul>
+
+<p>See the [VASP][vasp] page to find details on how the calculations should be set up and the suggested order of running the calculations.</p>
+
+<p>The results must then be post-processed by the <code class="language-plaintext highlighter-rouge">Export</code> code to be used as input to the other programs in the suite. Once the VASP results are exported, the raw files are not needed again. Some of the items exported are:</p>
+<ul>
+  <li>wave functions</li>
+  <li>projectors (for PAW)</li>
+  <li>projections</li>
+  <li>plane-wave grid</li>
+  <li>pseudopotential</li>
+</ul>
+
+<p>See the <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> page for more details on how to run the <code class="language-plaintext highlighter-rouge">Export</code> code and what outputs to expect.</p>
+
+<h2 id="energy-tabulation">Energy tabulation</h2>
+
+<p>There are difference energies used in different parts of the theory. Instead of calculating the different energies in different places, the <code class="language-plaintext highlighter-rouge">EnergyTabulator</code> code is used to gather the energy information from the exported data from the various systems and tabulate all of the needed energies for use in the <code class="language-plaintext highlighter-rouge">TME</code> and <code class="language-plaintext highlighter-rouge">LSF</code> codes. See the <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> page for more details.</p>
+
+<h2 id="phonons-and-phonon-post-processing">Phonons and phonon post-processing</h2>
+
+<p>The phonon eigenvectors and frequencies are needed to determine how the electronic-transition energy is dissipated into each of the phonon modes. It is assumed that eigenvectors and frequencies of the phonons in the initial and final relaxed positions are the same. Consequently, it does not matter which equilibrium positions are used for the phonon calculations; however, it is recommended to use the ground electronic state of the system for faster convergence of the phonon calculations.</p>
+
+<p>The phonon post-processing code (<code class="language-plaintext highlighter-rouge">PhononPP</code>) is then used to generate positions shifted along each eigenvector (needed for the first-order matrix element) and the Huang-Rhys factor (needed for distributing the energy across the modes in the <code class="language-plaintext highlighter-rouge">LSF</code> code). <code class="language-plaintext highlighter-rouge">PhononPP</code> is currently set up to read the required information in the form of the <code class="language-plaintext highlighter-rouge">mesh.yaml</code> output by <code class="language-plaintext highlighter-rouge">Phonopy</code>.</p>
+
+<p>Check out the [Phonons][phonons] and <a href="calculations_phononpp.html"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> pages for guidance on running a phonon calculation with <code class="language-plaintext highlighter-rouge">Phonopy</code> and how to use <code class="language-plaintext highlighter-rouge">PhononPP</code>.</p>
+
+<h2 id="zeroth-order">Zeroth-order</h2>
+
+<p>The zeroth-order transition rate is straightforward to calculate: run the <code class="language-plaintext highlighter-rouge">TME</code> and <code class="language-plaintext highlighter-rouge">LSF</code> codes with <code class="language-plaintext highlighter-rouge">order=0</code>. The <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code calculates the transition matrix element, then the <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> code does the time-domain integral to get the final transition rate.</p>
+
+<h2 id="first-order">First-order</h2>
+
+<p>The first-order matrix elements are more complex because a matrix element $M_j$ must be calculated for each phonon mode $j$. The <a href="calculations_phononpp.html"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> code generates <code class="language-plaintext highlighter-rouge">POSCAR</code> files with a small displacement along each of the phonon eigenvectors. The wave functions are needed for each of the shifted <code class="language-plaintext highlighter-rouge">POSCAR</code>s, so a VASP SCF calculation must be run, then the data must be post-processed using <code class="language-plaintext highlighter-rouge">Export</code>. The <code class="language-plaintext highlighter-rouge">TME</code> code is then run with the wave functions from the shifted postitions and the wave functions from the unshifted positions.</p>
+
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> We have found that the charge state must be the same for both cases, otherwise $M_j$ will not be independent of the displacement $\delta q_j$. The charge state used will not significantly affect the wave functions, but it must be the same for both sets of inputs. The positions must be the initial-charge-state equilibrium positions (and small displacements from them).</div>
+
+<p>Once the first-order matrix elements are calculated, run the <code class="language-plaintext highlighter-rouge">LSF</code> code to get the first-order transition rate.</p>
+
+<h2 id="complete-process">Complete process</h2>
+
+<p>Altogether, the complete process for a capture calculation is:</p>
+
+<figure><img class="docimage" src="images/CaptureFlowChart.png" alt="Capture flow chart" style="width: 70%; height: auto;" /></figure>
+
+<h2 id="getting-started">Getting started</h2>
+
+<p>To get started, see <a href="getting-started.html">Getting Started</a>.</p>
+
+
+
+    <div class="tags">
+        
+        <b>Tags: </b>
+        
+        
+        
+        
+        
+    </div>
+
+
+
+
+
+
+
+</div>
+
+<hr class="shaded"/>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
+ Site last generated: Sep 12, 2023 <br />
+<!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
+                </div>
+            </div>
+</footer>
+
+
+
+
+
+
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
+    </div>
+
+</body>
+
+</html>
+
+

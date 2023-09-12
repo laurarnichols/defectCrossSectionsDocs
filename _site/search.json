@@ -1,0 +1,172 @@
+
+[
+
+{
+"title": "Energy Tabulator Calculations",
+"tags": "energy-tabulator",
+"keywords": "energy",
+"url": "calculations_energy-tabulator.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "Energy Tabulator Code",
+"tags": "energy-tabulator",
+"keywords": "energy",
+"url": "code_energy-tabulator.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "Export Calculations",
+"tags": "export",
+"keywords": "export",
+"url": "calculations_export.html",
+"summary": "This page gives a summary of the Export code, including how to run, required inputs, and expected outputs."
+}
+,
+
+{
+"title": "Export Code",
+"tags": "export",
+"keywords": "export",
+"url": "code_export.html",
+"summary": "This page gives a summary of the Export code, including how to run, required inputs, and expected outputs."
+}
+,
+
+{
+"title": "Getting started with the Defect Cross Sections code",
+"tags": "getting_started",
+"keywords": "setup start",
+"url": "getting-started.html",
+"summary": "These brief instructions will help you get started quickly with the code. The other topics in the code go more in-depth into theory, the code itself, and examples."
+}
+,
+
+{
+"title": "Introduction",
+"tags": "introduction",
+"keywords": "homepage introduction",
+"url": "index.html",
+"summary": ""
+}
+,
+
+{
+"title": "LSF Calculations",
+"tags": "phonons line-shape-function",
+"keywords": "line shape function phonons dissipation",
+"url": "calculations_lsf.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "LSF Code",
+"tags": "phonons line-shape-function",
+"keywords": "line shape function phonons dissipation",
+"url": "code_lsf.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "PhononPP Calculations",
+"tags": "phonons post-processing phononpp",
+"keywords": "phonons post-processing phononpp",
+"url": "calculations_phononpp.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "PhononPP Code",
+"tags": "phonons post-processing phononpp",
+"keywords": "phonons post-processing phononpp",
+"url": "code_phononpp.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "Phonons",
+"tags": "phonons",
+"keywords": "phonons",
+"url": "phonons.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "Theory",
+"tags": "theory",
+"keywords": "theory",
+"url": "theory.html",
+"summary": "This page gives a summary of the theory developed in the Barmparis and GaN papers."
+}
+,
+
+{
+"title": "TME Calculations",
+"tags": "electronic tme",
+"keywords": "electronic transition matrix elements",
+"url": "calculations_tme.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "TME Code",
+"tags": "electronic tme",
+"keywords": "electronic transition matrix elements",
+"url": "code_tme.html",
+"summary": "Include a summary of this page."
+}
+,
+
+{
+"title": "VASP",
+"tags": "vasp",
+"keywords": "vasp",
+"url": "calculations_vasp.html",
+"summary": "This page gives a summary of the VASP calculations needed for a capture calculation, including parameter specifications and tips."
+}
+,
+
+
+
+
+{
+"title": "Sample post",
+"tags": "newsgetting_started",
+"keywords": "",
+"url": "samplepost.html",
+"summary": "This is some summary frontmatter for my sample post."
+}
+,
+
+
+{
+"title": "Welcome to Jekyll!",
+"tags": "news",
+"keywords": "",
+"url": "myupdate.html",
+"summary": ""
+}
+,
+
+
+{
+"title": "Test post from last year",
+"tags": "news",
+"keywords": "",
+"url": "test-post-from-last-year.html",
+"summary": ""
+}
+
+
+
+]

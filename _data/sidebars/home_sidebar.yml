@@ -1,0 +1,93 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+entries:
+- title: sidebar
+  product: Defect Cross Sections
+  version: 0.0
+  folders:
+
+  - title:
+    output: pdf
+    type: frontmatter
+    folderitems:
+    - title:
+      url: /titlepage.html
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage.html
+      output: pdf
+      type: frontmatter
+
+  - title: Overview
+    output: web, pdf
+    folderitems:
+
+    - title: Introduction
+      url: /index.html
+      output: web, pdf
+      type: homepage
+
+    - title: Getting started
+      url: /getting-started.html
+      output: web, pdf
+
+    - title: Theory
+      url: /theory.html
+      output: web, pdf
+
+  - title: Calculations
+    output: web, pdf
+    folderitems:
+
+    - title: VASP
+      url: /calculations_vasp.html
+      output: web, pdf
+
+    - title: Export
+      url: /calculations_export.html
+      output: web, pdf
+
+    - title: Energy tabulator
+      url: /calculations_energy-tabulator.html
+      output: web, pdf
+
+    - title: Phonons
+      url: /calculations_phonons.html
+      output: web, pdf
+
+    - title: PhononPP
+      url: /calculations_phononpp.html
+      output: web, pdf
+
+    - title: TME
+      url: /calculations_tme.html
+      output: web, pdf
+
+    - title: LSF
+      url: /calculations_lsf.html
+      output: web, pdf
+      
+  - title: Code
+    output: web, pdf
+    folderitems:
+
+    - title: Export
+      url: /code_export.html
+      output: web, pdf
+
+    - title: Energy tabulator
+      url: /code_energy-tabulator.html
+      output: web, pdf
+
+    - title: PhononPP
+      url: /code_phononpp.html
+      output: web, pdf
+
+    - title: TME
+      url: /code_tme.html
+      output: web, pdf
+
+    - title: LSF
+      url: /code_lsf.html
+      output: web, pdf
