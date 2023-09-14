@@ -51,6 +51,8 @@ Check out the [Phonons][phonons] and [`PhononPP`][calculations_phononpp] pages f
 
 ## Zeroth-order
 
+{% include note.html content="The zeroth-order term is only valid for nonequilibrium capture. See the [theory][theory] page for more details." %}
+
 The zeroth-order transition rate is straightforward to calculate: run the `TME` and `LSF` codes with `order=0`. The [`TME`][calculations_tme] code calculates the transition matrix element, then the [`LSF`][calculations_lsf] code does the time-domain integral to get the final transition rate. 
 
 ## First-order
