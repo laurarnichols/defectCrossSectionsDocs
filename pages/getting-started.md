@@ -13,7 +13,7 @@ First, you will need to have VASP set up on the machine you are working on. If i
 
 {% include note.html content="The [`Export`][calculations_export] currently only works with the standard version of VASP or to export only the energies from results from the gamma-only version of VASP. Assumptions made in the code are not compatible with the noncollinear version." %}
 
-To setup the defect cross sections code, clone the repo, then edit the parameters at the top of the main `Makefile`. The QE-based versions of `Export` is currently out of date, so don't worry about updating those values. Make sure to update the compilers `f90` and `mpif90` to the intel wrappers specific to your system.
+To setup the defect cross sections code, clone the repo, then edit the parameters at the top of the main `Makefile`. The QE-based versions of `Export` are currently out of date, so don't worry about updating those values. Make sure to update the compilers `f90` and `mpif90` to the intel wrappers specific to your system.
 
 {% include note.html content="The `Export` and `TME` codes utilize binary I/O for parallelization. This feature has only been tested with an Intel compiler, so it may break with another compiler." %}
 
