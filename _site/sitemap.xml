@@ -116,6 +116,12 @@
   
   
   <url>
+    <loc>http://localhost:4000/tutorial.html</loc>
+  </url>
+  
+  
+  
+  <url>
     <loc>http://localhost:4000/vasp.html</loc>
   </url>
   

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="This page includes a tutorial on running an electron capture calculation from start to finish using a triply-hydrogenated silicon vacancy as an example.">
+<meta name="keywords" content=",  tutorial silicon example">
+<title>Tutorial: $\text{Si}_{\text{V}}\text{H}_3$ | Defect Cross Sections</title>
+<link rel="stylesheet" href="css/syntax.css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="css/customstyles.css">
+<link rel="stylesheet" href="css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="css/theme-blue.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.2.0/anchor.min.js"></script>
+<script src="js/toc.js"></script>
+<script src="js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="images/favicon.ico">
+
+
+<script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="defectCrossSections" href="http://localhost:4000/feed.xml">
+
+
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> Defect Cross Sections</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button -->
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Show site nav</a></li>
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="https://github.com/laurarnichols/defectCrossSections" target="_blank" rel="noopener">GitHub</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Resources<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li><a href="https://www.vasp.at/wiki/index.php/The_VASP_Manual" target="_blank" rel="noopener">VASP Wiki</a></li>
+                        
+                        
+                        
+                        <li><a href="https://phonopy.github.io/phonopy/" target="_blank" rel="noopener">Phonopy Docs</a></li>
+                        
+                        
+                    </ul>
+                </li>
+                
+                
+                
+			<li>
+
+
+
+  <a class="email" title="Submit feedback" href="#" onclick="javascript:window.location='mailto:laurarnichols@gmail.com?subject=Defect Cross Sections feedback&body=I have some feedback about the Tutorial: $\text{Si}_{\text{V}}\text{H}_3$ page: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Need help?</a>
+
+</li>
+
+
+
+		
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Tutorial: $\text{Si}_{\text{V}}\text{H}_3$">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
+        
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle">Defect Cross Sections 0.0</li>
+  
+  
+  
+      
+  
+  <li>
+      <a title="Overview" href="#">Overview</a>
+      <ul>
+          
+          
+          
+          <li><a title="Introduction" href="index.html">Introduction</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Getting started" href="getting-started.html">Getting started</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Theory" href="theory.html">Theory</a></li>
+          
+          
+          
+          
+          
+          
+          <li class="active"><a title="Tutorial" href="tutorial.html">Tutorial</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Calculations" href="#">Calculations</a>
+      <ul>
+          
+          
+          
+          <li><a title="VASP" href="vasp.html">VASP</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Export" href="calculations_export.html">Export</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Energy tabulator" href="calculations_energy-tabulator.html">Energy tabulator</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Phonons" href="phonons.html">Phonons</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="PhononPP" href="calculations_phononpp.html">PhononPP</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="TME" href="calculations_tme.html">TME</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="LSF" href="calculations_lsf.html">LSF</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Code" href="#">Code</a>
+      <ul>
+          
+          
+          
+          <li><a title="Export" href="code_export.html">Export</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Energy tabulator" href="code_energy-tabulator.html">Energy tabulator</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="PhononPP" href="code_phononpp.html">PhononPP</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="TME" href="code_tme.html">TME</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="LSF" href="code_lsf.html">LSF</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+      
+      <!-- if you aren't using the accordion, uncomment this block:
+         <p class="external">
+             <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+         </p>
+         -->
+</ul>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+
+
+            </div>
+            
+        
+
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <div class="post-header">
+   <h1 class="post-title-main">Tutorial: $\text{Si}_{\text{V}}\text{H}_3$</h1>
+</div>
+
+
+
+<div class="post-content">
+
+   
+    <div class="summary">This page includes a tutorial on running an electron capture calculation from start to finish using a triply-hydrogenated silicon vacancy as an example.</div>
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+
+});
+</script>
+
+<div id="toc"></div>
+
+
+
+    
+
+
+    
+
+   <h2 id="problem-definition">Problem definition</h2>
+
+<p>This tutorial will consider the positive-to-neutral transition. We use the <a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.105501" target="_blank">WZP</a> method to accomplish our desired charge states without affecting the neutrality of the supercell. The ground state of this defect is neutral with a singly-occupied defect. To get the positive charge state, we excite the electron out of the defect level into the conduction band.</p>
+
+<h2 id="vasp-and-export">VASP and Export</h2>
+
+<ol>
+  <li>Make sure the executables are set up on your machine (see <a href="getting-started">Getting Started</a>)</li>
+  <li>Do a volume relaxation on the silicon unit cell. The conventional unit cell that we start with is
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Si
+1.000000
+5.430700000  0.000000000  0.000000000
+0.000000000  5.430700000  0.000000000
+0.000000000  0.000000000  5.430700000
+Si
+ 8
+Direct
+0.000000000 0.000000000 0.000000000
+0.000000000 0.500000000 0.500000000
+0.500000000 0.000000000 0.500000000
+0.500000000 0.500000000 0.000000000
+0.250000000 0.250000000 0.250000000
+0.250000000 0.750000000 0.750000000
+0.750000000 0.250000000 0.750000000
+0.750000000 0.750000000 0.250000000
+</code></pre></div>    </div>
+    <p>You can also start from the primitive cell as in <a href="https://www.vasp.at/wiki/index.php/Cd_Si_volume_relaxation" target="_blank">this VASP tutorial</a>. You should end up with a lattice parameter of $5.4684 \,\overset{\lower.5em\circ}{\mathrm{A}}$.</p>
+  </li>
+  <li>Scale up to your supercell (we used 4x4x4, i.e. 512 atoms).</li>
+  <li>Relax the inner DOF of the perfect crystal. For this tutorial, just use the gamma-point, but make sure to use the standard version of VASP for any calculations you plan to export the wave functions from (pristine and final charge state at initial positions). The <code class="language-plaintext highlighter-rouge">INCAR</code> used for the pristine relaxation was
+    <div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">! How to initialize charge density and wave functions</span><span class="w">
+</span><span class="n">ISTART</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w">        </span><span class="c1">! 0 to start a new job, 1 for continuing and reading in wf</span><span class="w">
+</span><span class="n">ICHARG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">        </span><span class="c1">! 2 to start a new job, 1 for continuing and reading in chg</span><span class="w">
+</span><span class="n">INIWAV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">        </span><span class="c1">! chooses initially random wf, numerically best</span><span class="w">
+</span><span class="c1">!</span><span class="w">
+</span><span class="c1">! Electronic control flags</span><span class="w">
+</span><span class="n">ENCUT</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">400</span><span class="w">      </span><span class="c1">! cutoff energy</span><span class="w">
+</span><span class="n">EDIFF</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mf">1E-6</span><span class="w">     </span><span class="c1">! convergence threshold</span><span class="w">
+</span><span class="n">PREC</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">Normal</span><span class="w">   </span><span class="c1">! numerical precision</span><span class="w">
+</span><span class="n">ALGO</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">Normal</span><span class="w">   </span><span class="c1">! Davidson algorithm, usually best choice</span><span class="w">
+</span><span class="n">NELMIN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w">        </span><span class="c1">! min electronic steps</span><span class="w">
+</span><span class="n">NELM</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="w">       </span><span class="c1">! max electronic steps</span><span class="w">
+</span><span class="c1">!</span><span class="w">
+</span><span class="n">ISPIN</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">        </span><span class="c1">! Spin polarized calculation: 1 = No, 2 = Yes</span><span class="w">
+</span><span class="c1">!</span><span class="w">
+</span><span class="c1">! Parallelization flags</span><span class="w">
+</span><span class="n">NCORE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="w">        </span><span class="c1">! Band parallelization, 16 is good for PBE, 4 is good for HSE</span><span class="w">
+</span><span class="n">KPAR</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">         </span><span class="c1">! Set to number of k-point blocks (remember to multiply nodes/procs in jobscript)</span><span class="w">
+</span><span class="c1">!</span><span class="w">
+</span><span class="c1">! Ionic control flags</span><span class="w">
+</span><span class="n">EDIFFG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">-1E-2</span><span class="w">    </span><span class="c1">! Convergence for ionic relaxation</span><span class="w">
+</span><span class="n">NSW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span><span class="w">           </span><span class="c1">! Number of ionic steps per relaxation job</span><span class="w">
+</span><span class="n">IBRION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">       </span><span class="c1">! Relaxation algorithm, -1 is off, 2 is conjugate gradient</span><span class="w">
+</span><span class="n">ISIF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">          </span><span class="c1">! What to relax. 2 does just the internal DOF, 3 does the lattice vectors too</span><span class="w">
+</span><span class="c1">!</span><span class="w">
+</span><span class="c1">! Electronic broadening</span><span class="w">
+</span><span class="n">ISMEAR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w">        </span><span class="c1">! 0 is Gaussian broadening</span><span class="w">
+</span><span class="n">SIGMA</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mf">0.01</span><span class="w">     </span><span class="c1">! amount of broadening</span><span class="w">
+</span><span class="c1">!</span><span class="w">
+</span><span class="n">LWAVE</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="kc">.TRUE.</span><span class="w">   </span><span class="c1">! write out wavefunctions</span><span class="w">
+</span><span class="n">LCHARG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.TRUE.</span><span class="w">   </span><span class="c1">! write out chargedensity</span><span class="w">
+</span><span class="n">LVTOT</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="kc">.FALSE.</span><span class="w">  </span><span class="c1">! write out full potential</span><span class="w">
+</span><span class="n">LVHAR</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="kc">.FALSE.</span><span class="w">  </span><span class="c1">! write out electrostatic potential</span><span class="w">
+</span></code></pre></div>    </div>
+    <p><em>The <code class="language-plaintext highlighter-rouge">!</code> characters on the blank lines are needed for the above code block to be formatted correctly, but they serve no purpose in the actual file.</em> <strong>Only the gamma point should be used for all of the VASP calculations in this example.</strong></p>
+  </li>
+  <li>Follow with an SCF calculation with a tighter <code class="language-plaintext highlighter-rouge">EDIFF=1e-8</code> and more bands. We used around 1500, but make sure that the number of bands that you choose fits the number of processes you are running on (see the <a href="vasp.html#nbands"><code class="language-plaintext highlighter-rouge">NBANDS</code> and <code class="language-plaintext highlighter-rouge">NCORE</code> sections on the VASP page</a>).</li>
+  <li>In the center of the supercell, introduce the defect. In this case, remove a silicon atom close to the center and add 3 hydrogen atoms along the previously-existing bonds. One silicon atom will retain a dangling bond, which is the defect level.</li>
+  <li>Relax the inner DOF in the ground state, then run the required SCF calculation to fix the charge density for the last relaxation step.</li>
+  <li>Use the converged <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code> as the starting point for the postive-charge-state relaxation. To get the positive charge state, use
+    <div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ISMEAR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-2</span><span class="w">
+</span><span class="n">FERWE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1022</span><span class="o">*</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">535</span><span class="o">*</span><span class="mi">0</span><span class="w">
+</span><span class="n">FERDO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1022</span><span class="o">*</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">535</span><span class="o">*</span><span class="mi">0</span><span class="w">
+</span></code></pre></div>    </div>
+    <p><code class="language-plaintext highlighter-rouge">FERWE</code> sets the spin-up occupations and <code class="language-plaintext highlighter-rouge">FERDO</code> sets the spin-down occupations. The numbers given are for a choice of 1560 bands. Make sure that your number of bands aligns with your <a href="vasp.html#ncore">parallelization criteria</a>, otherwise VASP may automatically adjust it, messing up the manual occupations. I like to have the band extrema and the defect levels written explicitly for easier visualization in different files, but that is not required.</p>
+  </li>
+  <li>Use the relaxed positive-charge state positions and run a ground-state SCF calculation with the same parameters as the pristine SCF calculation.</li>
+  <li><a href="calculations_export"><code class="language-plaintext highlighter-rouge">Export</code></a> the pristine supercell calculation and the ground-state-defect/positive-state-positions (you only need to set <code class="language-plaintext highlighter-rouge">VASPDir</code> and <code class="language-plaintext highlighter-rouge">exportDir</code> for these calculations).</li>
+</ol>
+
+<p>To get the total energies, also do HSE SCF calculations for the relaxed positive charge state, the relaxed ground state, and the ground state at the positive relaxed positions. The gamma-only version of VASP can be used since we only need the energies. <a href="calculations_export"><code class="language-plaintext highlighter-rouge">Export</code></a> the HSE results with the option <code class="language-plaintext highlighter-rouge">energiesOnly = .true.</code> and <code class="language-plaintext highlighter-rouge">gammaOnly =.true.</code>, if applicable.</p>
+
+<h2 id="energytabulator">EnergyTabulator</h2>
+
+<p>Once all of the results are exported, run <a href="calculations_energy-tabulator"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> to calculate all of the required energies. Make sure to point <code class="language-plaintext highlighter-rouge">exportDirEigs</code> to the ground-state-HSE <code class="language-plaintext highlighter-rouge">Export</code> output. Since we are using HSE total energies and eigenvalues, we don’t need any energy corrections. The reference band should be set to where the carrier is in our calculations. In this case, the reference carrier is in the CBM:</p>
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">refBand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1025</span><span class="w">
+</span></code></pre></div></div>
+<p>We are considering electron capture, so we should also set</p>
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CBMorVBMBand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1025</span><span class="w">
+</span></code></pre></div></div>
+<p>The initial and final band ranges should be set based on the initial and final states that you want to consider. For capture, there should be only one final state (the defect level), so we should use</p>
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iBandFinit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="w">
+</span><span class="n">iBandIinit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="w">
+</span></code></pre></div></div>
+<p>Include as many initial bands as you want to plot. We used</p>
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iBandIinit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1025</span><span class="w">
+</span><span class="n">iBandIfinal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1088</span><span class="w">
+</span></code></pre></div></div>
+<p>which is about a 1 eV range to plot. This calculation is really fast ($&lt;$ 1 min.), so you can run on a single node.</p>
+
+<h2 id="phonons-and-phononpp">Phonons and PhononPP</h2>
+
+<p>Use some software to get the ground-state phonon eigenvectors and frequencies. We use <a href="https://phonopy.github.io/phonopy/" target="_blank">Phonopy</a> (see <a href="phonons">our documentation</a> on how to run a simple phonon calculation), but any software can be used as long as the result is the same YAML format.</p>
+
+<p>Once you have the phonons, run the <a href="calculations_phononpp"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> code to get all of the shifted positions needed for the first-order matrix elements and calculate the Huang-Rhys factor among other things needed as input to the <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> code. <em>You will want to run this in a clean directory because a shifted <code class="language-plaintext highlighter-rouge">POSCAR</code> will be output for each phonon mode.</em> We used <code class="language-plaintext highlighter-rouge">shift = 0.01</code> $\overset{\lower.5em\circ}{\mathrm{A}}$.</p>
+
+<h2 id="zeroth-order">Zeroth-order</h2>
+
+<p>Getting the zeroth-order transition rate is pretty straightforward. First, run the <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code with <code class="language-plaintext highlighter-rouge">order=0</code>, with <code class="language-plaintext highlighter-rouge">exportDirSD</code> pointing to the <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> output for the defect in the ground charge state and initial positions and <code class="language-plaintext highlighter-rouge">exportDirPC</code> pointing to the <code class="language-plaintext highlighter-rouge">Export</code> output for the perfect crystal. The same band ranges used in the <code class="language-plaintext highlighter-rouge">EnergyTabulator</code> code should be used here, and you should point to the energy tables.</p>
+
+<p>Once that <code class="language-plaintext highlighter-rouge">TME</code> is complete, run <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> with <code class="language-plaintext highlighter-rouge">order=0</code> and the same band ranges. Make sure to also point to the energy tables with <code class="language-plaintext highlighter-rouge">energyTableDir</code>, the <code class="language-plaintext highlighter-rouge">TME</code> output with <code class="language-plaintext highlighter-rouge">matrixElementDir</code>, and the <code class="language-plaintext highlighter-rouge">Sj.out</code> file generated by the <code class="language-plaintext highlighter-rouge">PhononPP</code> code using <code class="language-plaintext highlighter-rouge">SjInput</code>. The key parameters in the <code class="language-plaintext highlighter-rouge">LSF</code> input file are the temperature, time step, and smearing parameters (see the <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> documentation for more information on these parameters). Use</p>
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="n">temperature</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span><span class="w">
+ </span><span class="n">dt</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="mf">2.1d-9</span><span class="w">
+ </span><span class="n">hbarGamma</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w">    </span><span class="c1">! meV</span><span class="w">
+ </span><span class="n">smearingExpTolerance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1d-4</span><span class="w">
+</span></code></pre></div></div>
+<p>It is also important to pick out the proper spin channel. For this problem, choose the spin-down channel with <code class="language-plaintext highlighter-rouge">iSpin=1</code>.</p>
+
+<h2 id="first-order">First-order</h2>
+
+<p>The first-order term is more involved. To calculate the first-order matrix element, the following calculations must be done for each shifted file for the different phonon modes:</p>
+<ul>
+  <li>VASP SCF calculation</li>
+  <li><a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a></li>
+  <li><a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a></li>
+</ul>
+
+<p>A separate directory must be created for each mode and the shifted <code class="language-plaintext highlighter-rouge">POSCAR</code> must be copied into the directory along with the required VASP files. <strong>Make sure that each folder has padding zeros to make the number 4-digits wide, otherwise there will be issues with reading the files in the <code class="language-plaintext highlighter-rouge">LSF</code> code.</strong> To speed things up, it also helps to copy the <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code> from the unshifted calculation. It is best to set up a bash script to do this rather than manually copying all of the files. If you include copying the <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code>, this will take a long time, so it is best to submit the script to the queue to allow it to run. Here is an example PBS script of how that can be done:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># Move POSCAR-xxx files from `PhononPP` into individual folders and</span>
+<span class="c"># create a run script for each. You must have INCAR, KPOINTS, and</span>
+<span class="c"># POTCAR files in current directory. If you want to include the </span>
+<span class="c"># WAVECAR and CHGCAR as well, make sure those are present in the </span>
+<span class="c"># current directory or you include the proper path.</span>
+<span class="c">#</span>
+<span class="c"># To run (assuming you call this script `createShiftedDirs.scr`):</span>
+<span class="c"># chmod +x createShiftedDirs.scr</span>
+<span class="c"># qsub createShiftedDirs.scr</span>
+<span class="c">#</span>
+<span class="c">## Required PBS Directives --------------------------------------</span>
+<span class="c">#PBS -A &lt;grant-id&gt;</span>
+<span class="c">#PBS -q standard</span>
+<span class="c">#PBS -l select=3:ncpus=44:mpiprocs=44</span>
+<span class="c">#PBS -l walltime=1:00:00</span>
+<span class="c">#PBS -l place=scatter:excl</span>
+
+<span class="c">## Optional Directives ------------------------------------</span>
+<span class="c">#PBS -N SiVH3_submit</span>
+<span class="c">#PBS -j oe</span>
+<span class="c">#PBS -M &lt;email&gt;</span>
+<span class="c">#PBS -m be</span>
+
+<span class="c"># Define parameters</span>
+<span class="nv">BASE_DIR</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">/path/to/your/folder"</span>
+
+<span class="nv">N</span><span class="o">=</span>132
+
+
+<span class="nb">cd</span> <span class="k">${</span><span class="nv">BASE_DIR</span><span class="k">}</span>
+
+
+createDirCopy<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local </span><span class="nv">i</span><span class="o">=</span><span class="nv">$1</span>
+  <span class="c"># Make folder for each displacement</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-d</span> <span class="s2">"disp-</span><span class="nv">$i</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">mkdir </span>disp-<span class="nv">$i</span>
+
+    <span class="c"># Move the displaced POSCAR files to individual</span>
+    <span class="c"># folders as POSCAR</span>
+    <span class="nb">mv </span>ph_POSCAR_<span class="nv">$i</span> disp-<span class="nv">$i</span>/POSCAR
+
+    <span class="c"># Copy in other input files for SCF calculation, Export, and TME</span>
+    <span class="nb">cp </span>INCAR KPOINTS POTCAR WAVECAR CHGCAR SiVH3_export.in TME.in disp-<span class="nv">$i</span>
+
+    <span class="c"># Generate a script to run all 3 in this folder</span>
+    <span class="nb">cat</span> <span class="o">&gt;</span> disp-<span class="nv">$i</span>/run_VASP-Export-TME.scr <span class="o">&lt;&lt;</span> <span class="no">EOF</span><span class="sh">
+#!/bin/bash
+## Required PBS Directives --------------------------------------
+#PBS -A &lt;grant-id&gt;
+#PBS -q standard
+#PBS -l select=6:ncpus=44:mpiprocs=44
+#PBS -l walltime=1:00:00
+#PBS -l place=scatter:excl
+
+## Optional Directives ------------------------------------
+#PBS -N </span><span class="k">${</span><span class="nv">i</span><span class="k">}</span><span class="sh">SiVH3_FOME
+#PBS -j oe
+
+# Define parameters
+BASE_DIR="</span><span class="se">\$</span><span class="sh">{WORKDIR}/path/to/your/folder/disp-</span><span class="k">${</span><span class="nv">i</span><span class="k">}</span><span class="sh">"
+
+## Execution Block -----------------------------------------------
+# Environment Setup
+# cd to base directory in /work
+cd </span><span class="se">\$</span><span class="sh">{BASE_DIR}
+
+# Launching  ----------------------------------------------------
+module unload cray-libsci
+
+echo "Running VASP." &amp;&amp;
+date +"%T" &amp;&amp;
+aprun -n 264 ~/vasp.5.4.4/bin/vasp_std &amp;&amp;
+echo "VASP exited clean. Running Export." &amp;&amp;
+date +"%T" &amp;&amp;
+aprun -n 264 ~/defectCrossSections/bin/Export_VASP.x -nk 1 -nb 4 &lt; SiVH3_export.in &gt; SiVH3_export.out &amp;&amp;
+echo "Export exited clean. Submitting TME." &amp;&amp;
+date +"%T" &amp;&amp;
+aprun -n 264 ~/defectCrossSections/bin/TME.x -nk 1 &lt; TME.in &gt; TME.out &amp;&amp;
+date +"%T"
+</span><span class="no">EOF
+</span>  <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="k">for </span>i <span class="k">in</span> <span class="o">{</span>0001..1539<span class="o">}</span>
+<span class="k">do
+  </span>createDirCopy <span class="nv">$i</span> &amp;
+
+  <span class="k">if</span> <span class="o">[[</span> <span class="si">$(</span><span class="nb">jobs</span> <span class="nt">-r</span> <span class="nt">-p</span> | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span> <span class="nt">-ge</span> <span class="nv">$N</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">wait</span> <span class="nt">-n</span>
+  <span class="k">fi
+done
+</span><span class="nb">wait</span>
+</code></pre></div></div>
+
+<p>This script will utilize multiple processes to copy the directories faster. You can edit this script or create others for submitting the scripts, checking their status, copying the output, etc. This is a huge calculation (total of 4ish days), and it requires checking on the calculations regularly. I would highly suggest using <a href="https://chat.openai.com/" target="_blank">ChatGPT</a> to help generate any scripts if you are not familiar with bash scripting, but beware that you will still need to check the results from ChatGPT as it is not always completely accurate.</p>
+
+<p>Some tips for running these calculations:</p>
+<ul>
+  <li>Track which ones are complete in a spreadsheet or something similar.</li>
+  <li>You can run these calculations on multiple machines if you have access to speed things up.</li>
+  <li>If you run on multiple machines, make sure to track which calculations are on which machine (they will all need to be gathered on one machine at some point).</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">wc -l</code> on the output files to check that the calculations finished (use a calculation you know completed as reference).</li>
+</ul>
+
+<p>Once all of the first-order matrix elements are complete, run <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> with <code class="language-plaintext highlighter-rouge">order=1</code> and the same parameters as in the zeroth-order term. <code class="language-plaintext highlighter-rouge">matrixElementDir</code> should be set to the folder used for the matrix-element output in each subfolder (usually <code class="language-plaintext highlighter-rouge">TME</code>). <code class="language-plaintext highlighter-rouge">MjBaseDir</code> should be set to the main folder that all of the displaced-calculation folders are in. <code class="language-plaintext highlighter-rouge">prefix</code> should be set to the prefix of each subdirectory (usually <code class="language-plaintext highlighter-rouge">disp-</code>).</p>
+
+<h2 id="group-velocity">Group velocity</h2>
+
+<p>The results from the LSF code give you the transition rate, but the transition rate can be converted to a cross section using</p>
+
+\[\sigma = \frac{\Gamma \Omega}{v_g},\]
+
+<p>where $\Gamma$ is the transition rate, $\Omega$ is the supercell volume, and $v_g$ is the group velocity.</p>
+
+<p>To accurately get the group velocity, it is best to utilize the equation</p>
+
+\[v_{gi} = \frac{1}{\hbar} \frac{\partial E}{\partial k_i},\]
+
+<p>where $i$ is the $x,y,z$ index, then use</p>
+
+\[||v_g|| =  \sqrt{v_{gx}^2 + v_{gy}^2 + v_{gz}^2}\]
+
+<p>to combine the components. To practically calculate this, we must get the perfect-crystal energy bands at k-points slightly offset from the base k-point and calculate the slope of the bands. You only need two points to determine a slope, but there are often band crossings. Often, three points (center and $\pm$) is enough to connect straight lines, but sometimes the bands are curved and using straight lines would give incorrect results. To be safe, 5 points should be used in each coordinate direction so that it is clear how the points should be connected and how the slope should be calculated.</p>
+
+<p>As an example, consider the <code class="language-plaintext highlighter-rouge">KPOINTS</code> file centered at the <code class="language-plaintext highlighter-rouge">0.000000 0.000000 0.000000</code> k-point (in direct coordinates):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Explicit k-points
+13
+Direct
+ 0.000000  0.000000  0.000000  1
+-0.020000  0.000000  0.000000  0
+-0.010000  0.000000  0.000000  0
+ 0.010000  0.000000  0.000000  0
+ 0.020000  0.000000  0.000000  0
+ 0.000000 -0.020000  0.000000  0
+ 0.000000 -0.010000  0.000000  0
+ 0.000000  0.010000  0.000000  0
+ 0.000000  0.020000  0.000000  0
+ 0.000000  0.000000 -0.020000  0
+ 0.000000  0.000000 -0.010000  0
+ 0.000000  0.000000  0.010000  0
+ 0.000000  0.000000  0.020000  0
+
+</code></pre></div></div>
+<p>The main k-point is the only one with any weight to speed up the calculations. Each direction contains two negatively-displaced k-points, two positively-displaced k-points, and the center k-point. Run an SCF calculation on the perfect crystal supercell with the given set of k-points.</p>
+
+<p>Once that calculation is complete, you need to gather the eigenvalues for plotting so that you can manually determine how the bands should line up. You can do this manually by looking at the <code class="language-plaintext highlighter-rouge">EIGENVAL</code> file, or you can use the <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> code. To do this, use the following options:</p>
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">energiesOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.true.</span><span class="w">
+</span><span class="n">groupForGroupVelocity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.true.</span><span class="w">
+</span><span class="n">nDispkPerCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w">
+</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'-0.02 -0.01 0.01 0.02'</span><span class="w">
+</span></code></pre></div></div>
+<p>The <code class="language-plaintext highlighter-rouge">Export</code> code assumes that the base k-point is first in the list and that the displacement pattern for each coordinate is consistent. It does not matter what order you do the displacement in, as long as the pattern is consistent for each coordinate and it matches the <code class="language-plaintext highlighter-rouge">pattern</code> variable in the input file. <code class="language-plaintext highlighter-rouge">pattern</code> should have <code class="language-plaintext highlighter-rouge">nDispkPerCoord</code> numbers in a string. The velocities will be sorted and output from negative to positive (including the base k-point) for each coordinate in files like <code class="language-plaintext highlighter-rouge">groupedEigenvaluesX.isp.ik</code>.</p>
+
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> There are symmetry considerations for calculating the group velocity at the gamma point. I do not know how this was done, but Guanzhi is supposed to be writing up documentation on this process.</div>
+
+
+
+    <div class="tags">
+        
+        <b>Tags: </b>
+        
+        
+        
+    </div>
+
+
+
+
+
+
+
+</div>
+
+<hr class="shaded"/>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
+ Site last generated: Sep 20, 2023 <br />
+<!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
+                </div>
+            </div>
+</footer>
+
+
+
+
+
+
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
+    </div>
+
+</body>
+
+</html>
+
+

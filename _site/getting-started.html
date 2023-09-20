@@ -241,6 +241,13 @@
           
           
           
+          
+          
+          <li><a title="Tutorial" href="tutorial.html">Tutorial</a></li>
+          
+          
+          
+          
       </ul>
    </li>
      
@@ -410,7 +417,34 @@ $('#toc').on('click', 'a', function() {
 
    <h2 id="setup">Setup</h2>
 
-<p>Add instructions on how to get set up.</p>
+<p>First, you will need to have VASP set up on the machine you are working on. If it is already compiled on the machine, it is best to use that executable because it will be well-optimized for the specific machine structure. If not, work with the help desk to set up the required <code class="language-plaintext highlighter-rouge">makefile.include</code> to get VASP compiled.</p>
+
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> currently only works with the standard version of VASP or to export only the energies from results from the gamma-only version of VASP. Assumptions made in the code are not compatible with the noncollinear version.</div>
+
+<p>To setup the defect cross sections code, clone the repo, then edit the parameters at the top of the main <code class="language-plaintext highlighter-rouge">Makefile</code>. The QE-based versions of <code class="language-plaintext highlighter-rouge">Export</code> is currently out of date, so don’t worry about updating those values. Make sure to update the compilers <code class="language-plaintext highlighter-rouge">f90</code> and <code class="language-plaintext highlighter-rouge">mpif90</code> to the intel wrappers specific to your system.</p>
+
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The <code class="language-plaintext highlighter-rouge">Export</code> and <code class="language-plaintext highlighter-rouge">TME</code> codes utilize binary I/O for parallelization. This feature has only been tested with an Intel compiler, so it may break with another compiler.</div>
+
+<p>To compile all of the code needed to run with VASP, run <code class="language-plaintext highlighter-rouge">make all_VASP</code>. Running <code class="language-plaintext highlighter-rouge">make all</code> will currently fail because the QE-based codes are still intertwined with the QE code itself. We have not had a need to implement the QE version right now because we ran into issues with doing HSE calculations with d-electrons in QE, so it has not been a focus. The feature can always be implemented in the future if needed.</p>
+
+<h2 id="running-the-codes">Running the codes</h2>
+
+<p>The <a href="index.html">home page</a> contains an overview of how the codes piece together, and the <a href="theory.html">theory</a> page contains a brief overview of the theory and how it relates to the codes. There are many choices to make in the VASP codes, and care must be taken to pass the right inputs into the codes in the correct order. It is <em>highly recommended</em> to review those pages before running the codes.</p>
+
+<p>Once you have reviewed the overview pages to get a sense of how the codes work together, check out the individual documentation pages for detailed information on how to run each of the codes:</p>
+<ul>
+  <li><a href="vasp.html"><code class="language-plaintext highlighter-rouge">VASP</code></a></li>
+  <li><a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a></li>
+  <li><a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a></li>
+  <li><a href="phonons.html"><code class="language-plaintext highlighter-rouge">Phonons</code></a></li>
+  <li><a href="calculations_phononpp.html"><code class="language-plaintext highlighter-rouge">PhononPP</code></a></li>
+  <li><a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a></li>
+  <li><a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a></li>
+</ul>
+
+<h2 id="tutorial">Tutorial</h2>
+
+<p>As you are learning, it is helpful to run an example calculation. Check out the <a href="tutorial.html">tutorial</a> page on running a capture calculation on a triply-hydrogenated Si vacancy.</p>
 
 
 
@@ -440,7 +474,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Sep 13, 2023 <br />
+ Site last generated: Sep 20, 2023 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>

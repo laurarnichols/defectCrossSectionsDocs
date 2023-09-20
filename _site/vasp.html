@@ -241,6 +241,13 @@
           
           
           
+          
+          
+          <li><a title="Tutorial" href="tutorial.html">Tutorial</a></li>
+          
+          
+          
+          
       </ul>
    </li>
      
@@ -408,7 +415,9 @@ $('#toc').on('click', 'a', function() {
 
     
 
-   <p>The following VASP calculations are needed for a capture calculation:</p>
+   <h2 id="overview">Overview</h2>
+
+<p>The following VASP calculations are needed for a capture calculation:</p>
 <ul>
   <li>relaxed perfect crystal (plus SCF after)</li>
   <li>relaxed final charge state (plus SCF after)</li>
@@ -416,9 +425,22 @@ $('#toc').on('click', 'a', function() {
   <li>SCF for final charge state in initial positions</li>
 </ul>
 
-<p>The displacement between the initial- and final-charge-state relaxed positions gives the $\Delta q_j$ that determines how the electronic energy is split into the different phonon modes. It is recommended to extract the energies (using <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a>) from the ground-state system in the initial relaxed positions. The wave functions are only needed from the perfect crystal and final charge state/initial positions.</p>
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> It is easy enough to do the above calculations at the HSE level, but the first-order term is not feasible at the HSE level (i.e., ~1500 calculations $\times$ ~7 hours per calculation for a 4x4x4 supercell on 768 processors). Both terms should be done at the same level, so the wave functions for the zeroth-order term should not be done at the HSE level at this point.</div>
 
-<p>The wave functions and energies are extracted using <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a>. For any calculations where only the final positions are needed, it is not required to do an SCF calculation after or to run <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a>.</p>
+<p>The displacement between the initial- and final-charge-state relaxed positions gives the $\Delta q_j$ that determines how the electronic energy is split into the different phonon modes. The wave functions are only needed from the perfect crystal and final charge state/initial positions.</p>
+
+<p>We also need accurate energies for the delta function and matrix elements, but each of the band edges <em>and</em> the defect level within the gap are inaccurate, but they are not easily corrected (see <a href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.78.235104" target="_blank">this paper on correction methods</a>). Normally with total energy differences the errors cancel out; however, our calculations involve promoting an electron from the defect level to the conduction band minimum, which brings the errors in each of those bands into the calculation.</p>
+
+<p>The best approach to handling this error is to use HSE total energies for each of the systems. This HSE total energy should only be taken from one k-point because the defect level will have some artificial dispersion due to the finite supercell size. We use the gamma point because, in general, the error at gamma is considered to be the smallest. If that is found to not be the case, another k-point should be used to further minimize the error.</p>
+
+<p>If you are using a gamma-only k-point grid, the eigenvalues from the HSE level should be used as they are most accurate. For larger grids, however, the PBE eigenvalues can be used because the differences between bands within the conduction and valence bands are relatively accurate and HSE calculations at all k-points may not be feasible.</p>
+
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The zeroth-order term can easily be done with a denser k-point mesh, but it is not currently feasible to use multiple k-points at the supercell sizes that we use. If it becomes feasible, keep in mind that there are issues with correcting the PBE eigenvalues needed for the first-order matrix elements (see the <a href="calculations_energy-tabulator"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> page for more details).</div>
+
+<p>The wave functions and energies are extracted using <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a>. For any calculations where only the final positions are needed, it is not required to do an SCF calculation after or to run <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a>.
+It is recommended to extract the energies (using <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a>) from the ground-state system in the initial relaxed positions.</p>
+
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> currently only works with the standard version of VASP or to export only the energies from results from the gamma-only version of VASP. Assumptions made in the code are not compatible with the noncollinear version.</div>
 
 <h2 id="recommended-order">Recommended order</h2>
 
@@ -449,6 +471,14 @@ $('#toc').on('click', 'a', function() {
 
 <p>For the relaxations, it is okay to use a looser <code class="language-plaintext highlighter-rouge">EDIFF</code> like <code class="language-plaintext highlighter-rouge">1e-5</code>, but we use the wave functions from the SCF calculations, so the convergence criteria must be tighter for those. We have used <code class="language-plaintext highlighter-rouge">1e-8</code> in the past. To ensure that your convergence is tight enough, run the <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code with the same system input for both <code class="language-plaintext highlighter-rouge">PC</code> and <code class="language-plaintext highlighter-rouge">SD</code> and a small set of bands used for the initial state and final state. Check the <code class="language-plaintext highlighter-rouge">|&lt;f|i&gt;|^2</code> column in the <code class="language-plaintext highlighter-rouge">allElecOverlap.*.*</code> file to ensure that the bands are orthonormal. For the same initial and final band, the overlap should be close to 1. For different initial and final bands, the overlap should be close to zero (<code class="language-plaintext highlighter-rouge">~1e-10</code> is usually good).</p>
 
+<h3 id="isym"><a href="https://www.vasp.at/wiki/index.php/ISYM" target="_blank"><code class="language-plaintext highlighter-rouge">ISYM</code></a></h3>
+
+<p>Our code is not currently implemented with symmetrization, so symmetry must be completely turned off with <code class="language-plaintext highlighter-rouge">ISYM=-1</code>.</p>
+
+<h3 id="ispin"><a href="https://www.vasp.at/wiki/index.php/ISPIN" target="_blank"><code class="language-plaintext highlighter-rouge">ISPIN</code></a></h3>
+
+<p>Make sure that the proper choice of <code class="language-plaintext highlighter-rouge">ISPIN</code> is used for each of your calculations. The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> and <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> codes handle spin polarization automatically, so it is not required to use the same setting for every system.</p>
+
 <h3 id="nbands"><a href="https://www.vasp.at/wiki/index.php/NBANDS" target="_blank"><code class="language-plaintext highlighter-rouge">NBANDS</code></a></h3>
 
 <p>From the VASP wiki:</p>
@@ -458,13 +488,24 @@ $('#toc').on('click', 'a', function() {
 
 <p>The default setting in VASP already includes extra bands above the filled states to get better convergence; however, we need accurate calculations of both occupied and unoccupied states when considering electron capture. For electron capture, ensure that <code class="language-plaintext highlighter-rouge">NBANDS</code> is set so that there are plenty empty bands <em>above the empty states that you are using for your initial electron states.</em> The default value from VASP is <code class="language-plaintext highlighter-rouge">NELECT/2+NIONS/2</code>. You should at least increase above the default by the number of unoccupied states that you need.</p>
 
-<h3 id="isym"><a href="https://www.vasp.at/wiki/index.php/ISYM" target="_blank"><code class="language-plaintext highlighter-rouge">ISYM</code></a></h3>
+<h3 id="ncore"><a href="https://www.vasp.at/wiki/index.php/NCORE" target="_blank"><code class="language-plaintext highlighter-rouge">NCORE</code></a></h3>
 
-<p>Our code is not currently implemented with symmetrization, so symmetry must be completely turned off with <code class="language-plaintext highlighter-rouge">ISYM=-1</code>.</p>
+<p><code class="language-plaintext highlighter-rouge">NCORE</code> sets the number of bands per group. It is related to <code class="language-plaintext highlighter-rouge">NPAR</code>, which is the number of bands that are treated in parallel. The recommended settings on the wiki are <code class="language-plaintext highlighter-rouge">NPAR = sqrt(number-of-cores)</code> or <code class="language-plaintext highlighter-rouge">NCORE = cores-per-node</code>. The relationship between <code class="language-plaintext highlighter-rouge">NPAR</code> and <code class="language-plaintext highlighter-rouge">NCORE</code> is <code class="language-plaintext highlighter-rouge">NCORE = number-of-cores/KPAR/NPAR</code>.</p>
 
-<h3 id="ispin"><a href="https://www.vasp.at/wiki/index.php/ISPIN" target="_blank"><code class="language-plaintext highlighter-rouge">ISPIN</code></a></h3>
+<p>We have found that, for the system sizes we typically work with (~100-atom supercells), <code class="language-plaintext highlighter-rouge">NCORE=~16</code> is good for PBE and <code class="language-plaintext highlighter-rouge">NCORE=~4</code> is good for HSE. Ideally, <code class="language-plaintext highlighter-rouge">NCORE</code> should be a factor of <code class="language-plaintext highlighter-rouge">cores-per-node</code>, since this reduces communication between nodes. A lower (higher) <code class="language-plaintext highlighter-rouge">NCORE</code> is slower (faster) but utilizes less (more) memory.</p>
 
-<p>Make sure that the proper choice of <code class="language-plaintext highlighter-rouge">ISPIN</code> is used for each of your calculations. The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> and <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> codes handle spin polarization automatically, so it is not required to use the same setting for every system.</p>
+<p><code class="language-plaintext highlighter-rouge">NBANDS</code> and <code class="language-plaintext highlighter-rouge">NCORE</code> should line up as follows:</p>
+<ul>
+  <li>Take the number of cores and divide by <code class="language-plaintext highlighter-rouge">NCORE</code> to get the number of band groups</li>
+  <li>The number of bands must be evenly divisible by the number of band groups</li>
+  <li>If these values don’t line up, VASP will automatically adjust the numbers of bands, which can lead to issues if you are setting the occupations manually using <code class="language-plaintext highlighter-rouge">FERWE/FERDO</code></li>
+</ul>
+
+<h3 id="kpar"><a href="https://www.vasp.at/wiki/index.php/KPAR" target="_blank"><code class="language-plaintext highlighter-rouge">KPAR</code></a></h3>
+
+<p><code class="language-plaintext highlighter-rouge">KPAR</code> should be an integer divisor of the total number of cores. The number of processors working on a group of k-points is <code class="language-plaintext highlighter-rouge">number-of-cores/KPAR</code>. Try not to let the number of processors working on a group split across nodes (i.e., make <code class="language-plaintext highlighter-rouge">number-of-cores/KPAR</code> an integer divisor of the number of cores per node). Also, try to have the same number of k-points in each group (i.e., make <code class="language-plaintext highlighter-rouge">KPAR</code> an integer divisor of the number of unique k-points) or at least balance the load as best as possible. As an example, with 10 k-points you could have 5 groups working on 2 k-points each, but you wouldn’t want 8 groups because then 6 groups would be idle while the two groups with 2 k-points work on their second point.</p>
+
+<p>In VASP, the k-points are split up first, then bands. To be safe, you can set the bands and processors based on <code class="language-plaintext highlighter-rouge">NCORE</code>, then set <code class="language-plaintext highlighter-rouge">KPAR</code> based on number of k-points and multiply the number of nodes by <code class="language-plaintext highlighter-rouge">KPAR</code></p>
 
 
 
@@ -492,7 +533,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Sep 13, 2023 <br />
+ Site last generated: Sep 20, 2023 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>

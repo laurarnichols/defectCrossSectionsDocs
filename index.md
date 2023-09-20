@@ -10,7 +10,7 @@ tags: [introduction]
 
 This site provides the documentation for the Defect Cross Sections project. This code currently calculates the capture cross section for a defect in a semiconductor based on the [theory][theory] developed in the Barmparis and GaN papers. There are codes to integrate with both VASP and QuantumEspresso, but __only the VASP version is currently up-to-date__.
 
-The flow chart for the full calculation may be overwhelming, but _stick with me_. It is important to get an overall understanding of how the code pieces together because there are so many moving parts. But before showing you the full flow chart, let's start with a simple one:
+The [flow chart for the full calculation](#complete-process) may be overwhelming, but _stick with me_. It is important to get an overall understanding of how the code pieces together because there are so many moving parts. But before showing you the full flow chart, let's start with a simple one:
 
 {% include image.html file="CaptureFlowChartSimple.png" width="40%" alt="Simple capture flow chart" %}
 
@@ -68,6 +68,8 @@ Once the first-order matrix elements are calculated, run the `LSF` code to get t
 Altogether, the complete process for a capture calculation is:
 
 {% include image.html file="CaptureFlowChart.png" width="70%" alt="Capture flow chart" %}
+
+[Jump back to the top](#overview) to get a breakdown of each piece. 
 
 ## Getting started
 

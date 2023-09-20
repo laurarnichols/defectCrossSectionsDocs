@@ -128,6 +128,15 @@
 ,
 
 {
+"title": "Tutorial: $\text{Si}_{\text{V}}\text{H}_3$",
+"tags": "",
+"keywords": "tutorial silicon example",
+"url": "tutorial.html",
+"summary": "This page includes a tutorial on running an electron capture calculation from start to finish using a triply-hydrogenated silicon vacancy as an example."
+}
+,
+
+{
 "title": "VASP",
 "tags": "vasp",
 "keywords": "vasp",

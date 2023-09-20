@@ -36,6 +36,10 @@ entries:
       url: /theory.html
       output: web, pdf
 
+    - title: Tutorial
+      url: /tutorial.html
+      output: web, pdf
+
   - title: Calculations
     output: web, pdf
     folderitems:
