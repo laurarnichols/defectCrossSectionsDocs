@@ -415,9 +415,21 @@ $('#toc').on('click', 'a', function() {
 
     
 
-   <p>The theory behind the capture formalism (originally developed in the <a href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.92.214111" target="_blank">Barmparis paper</a>) is based on defining a basis set where the initial band state is decoupled from the final defect band state. This definition is based on the physical problem of a carrier coming far from the defect and getting captured. The problem is treated through perturbation theory. The unperturbed set of wave functions is the decoupled basis set, and the full wave functions are the defect wave functions.</p>
+   <h2 id="background">Background</h2>
 
-<p>The transition rate is derived using Fermi’s golden rule. The wave functions start as many-body but the form of Fermi’s golden rule allows the orthonormality of the single-particle orbitals to be exploited to simplify (assuming the form of a Slater determinant). These wave functions are only the electronic states. The electronic and vibrational states are decoupled using the <a href="#" data-toggle="tooltip" data-original-title="The Born-Oppenheimer approximation neglects the derivatives of the electronic wave functions with respect to the nuclear positions.">Born-Oppenheimer approximation.</a> The phonons come from the defect system. The phonon overlaps are transformed using a Fourier-like transform to a time-domain integral. Feynman’s path integral is then used to simplify the integrand.</p>
+<p>There are two kinds of capture: equilibrium and nonequilibrium. In equilibrium capture, the carrier is near the defect and the rates of capture and emission are equal. This case is covered by the capture theory dating back to the 1950s with <a href="https://royalsocietypublishing.org/doi/abs/10.1098/rspa.1950.0184" target="_blank">Huang and Rhys</a>, where the carrier is perturbed by electron-phonon coupling.</p>
+
+<p>However, most experimental conditions will have some kind of current, making the system nonequilibrium. For the nonequilibrium case, we must consider a carrier coming far away from the defect and being perturbed by the presence of the defect. Perturbation theory cannot be directly used for carrier for capture because the defect state cannot be constructed from a finite basis set of perfect-crystal Bloch states.</p>
+
+<p>The theory behind the capture formalism (originally developed in the <a href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.92.214111" target="_blank">Barmparis paper</a>) is based on defining a basis set where the initial band state is “decoupled” from the final defect band state. The wave functions are defect states with the coupling matrix element between the initial and final states removed. The coupling matrix element is used as a perturbation, and the full Hamiltonian is the full defect states.The transition rate is derived using Fermi’s golden rule. The wave functions start as many-body but the form of Fermi’s golden rule allows the orthonormality of the single-particle orbitals to be exploited to simplify (assuming the form of a Slater determinant).</p>
+
+<p>The wave functions discussed above are only the electronic states. The electronic and vibrational states are decoupled using the <a href="#" data-toggle="tooltip" data-original-title="The Born-Oppenheimer approximation neglects the derivatives of the electronic wave functions with respect to the nuclear positions.">Born-Oppenheimer approximation.</a> The phonons come from the defect system. The phonon overlaps are transformed using a Fourier-like transform to a time-domain integral. Feynman’s path integral is then used to simplify the integrand.</p>
+
+<p>Starting from the “uncoupled” basis set and transforming to usable wave functions (defect and pristine- crystal states), we end up with two terms. One term is first-order in the atomic displacements. This is exactly the term from electron-phonon coupling from the previous theory. Additionally, however, we end up with a zeroth-order (in the atomic displacements) term not considered by any other paper. This term represents the nonequilibrium perturbation on a carrier coming far from the defect.</p>
+
+<p>The first-order term was first calculated using density functional theory by <a href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.90.075202" target="_blank">Alkauskas et al.</a> for nonradiative capture in 2014. However, that approach and all previous approaches to the phonon integral have used single-mode or effective-mode approximations because the number of possible phonon configurations blows up as more modes are allowed to participate. We have developed a time-domain integration form that allows explicit consideration of all of the phonon modes in the crystal.</p>
+
+<p>Below, I discuss the form of the zeroth- and first-order terms and how they relate to our code.</p>
 
 <h2 id="zeroth-order">Zeroth-order</h2>
 
@@ -485,7 +497,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Sep 20, 2023 <br />
+ Site last generated: Sep 21, 2023 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>
