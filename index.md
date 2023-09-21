@@ -8,7 +8,7 @@ tags: [introduction]
 
 ## Overview
 
-This site provides the documentation for the Defect Cross Sections project. This code currently calculates the capture cross section for a defect in a semiconductor based on the [theory][theory] developed in the Barmparis and GaN papers. There are codes to integrate with both VASP and QuantumEspresso, but __only the VASP version is currently up-to-date__.
+This site provides the documentation for the [Defect Cross Sections project](https://github.com/laurarnichols/defectCrossSections){:target="_blank"}. This code currently calculates the capture cross section for a defect in a semiconductor based on the [theory][theory] developed in the Barmparis and GaN papers. There are codes to integrate with both VASP and QuantumEspresso, but __only the VASP version is currently up-to-date__.
 
 The [flow chart for the full calculation](#complete-process) may be overwhelming, but _stick with me_. It is important to get an overall understanding of how the code pieces together because there are so many moving parts. But before showing you the full flow chart, let's start with a simple one:
 
