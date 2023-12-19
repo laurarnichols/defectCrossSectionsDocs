@@ -4,9 +4,9 @@
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="This page gives a summary of the VASP calculations needed for a capture calculation, including parameter specifications and tips.">
-<meta name="keywords" content="vasp,  vasp">
-<title>VASP | Defect Cross Sections</title>
+<meta name="description" content="This page gives a summary of the VASP calculations needed for a capture calculation, including parameter specifications and tips, followed by details on how ...">
+<meta name="keywords" content="vasp export,  vasp export">
+<title>VASP and Export | Defect Cross Sections</title>
 <link rel="stylesheet" href="css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -163,7 +163,7 @@
 
 
 
-  <a class="email" title="Submit feedback" href="#" onclick="javascript:window.location='mailto:laurarnichols@gmail.com?subject=Defect Cross Sections feedback&body=I have some feedback about the VASP page: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Need help?</a>
+  <a class="email" title="Submit feedback" href="#" onclick="javascript:window.location='mailto:laurarnichols@gmail.com?subject=Defect Cross Sections feedback&body=I have some feedback about the VASP and Export page: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Need help?</a>
 
 </li>
 
@@ -183,7 +183,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: 'search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="VASP">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="VASP and Export">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -259,14 +259,7 @@
           
           
           
-          <li class="active"><a title="VASP" href="vasp.html">VASP</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Export" href="calculations_export.html">Export</a></li>
+          <li class="active"><a title="VASP and Export" href="vasp-and-export.html">VASP and Export</a></li>
           
           
           
@@ -294,14 +287,14 @@
           
           
           
-          <li><a title="TME" href="calculations_tme.html">TME</a></li>
+          <li><a title="Zeroth-order capture" href="zeroth-order-capture.html">Zeroth-order capture</a></li>
           
           
           
           
           
           
-          <li><a title="LSF" href="calculations_lsf.html">LSF</a></li>
+          <li><a title="First-order capture" href="first-order-capture.html">First-order capture</a></li>
           
           
           
@@ -374,7 +367,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">VASP</h1>
+   <h1 class="post-title-main">VASP and Export</h1>
 </div>
 
 
@@ -382,7 +375,7 @@
 <div class="post-content">
 
    
-    <div class="summary">This page gives a summary of the VASP calculations needed for a capture calculation, including parameter specifications and tips.</div>
+    <div class="summary">This page gives a summary of the VASP calculations needed for a capture calculation, including parameter specifications and tips, followed by details on how to Export those results for input into subsequent calculations.</div>
    
 
     
@@ -417,32 +410,31 @@ $('#toc').on('click', 'a', function() {
 
    <h2 id="overview">Overview</h2>
 
-<p>The following VASP calculations are needed for a capture calculation:</p>
+<p>The following systems are needed for a capture calculation:</p>
 <ul>
-  <li>relaxed perfect crystal (plus SCF after)</li>
-  <li>relaxed final charge state (plus SCF after)</li>
-  <li>relaxed initial charge state (plus SCF after)</li>
-  <li>SCF for final charge state in initial positions</li>
+  <li>relaxed perfect crystal</li>
+  <li>relaxed final-charge-state defect</li>
+  <li>relaxed initial-charge-state defect</li>
+  <li>final-charge-state defect in initial positions</li>
 </ul>
 
-<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> It is easy enough to do the above calculations at the HSE level, but the first-order term is not feasible at the HSE level (i.e., ~1500 calculations $\times$ ~7 hours per calculation for a 4x4x4 supercell on 768 processors). Both terms should be done at the same level, so the wave functions for the zeroth-order term should not be done at the HSE level at this point.</div>
+<p>We need to extract the total energy from all of the defect calculations, and we need the eigenvalues from the ground state of the initial positions (ground state is most accurate). We need to extract the wave functions from the perfect crystal and the final charge state/initial positions for the zeroth-order matrix element. We also need the displacement between the initial- and final-charge-state relaxed positions to get the $\Delta q_j$ that determines how the electronic energy is split into the different phonon modes.</p>
 
-<p>The displacement between the initial- and final-charge-state relaxed positions gives the $\Delta q_j$ that determines how the electronic energy is split into the different phonon modes. The wave functions are only needed from the perfect crystal and final charge state/initial positions.</p>
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> It is easy enough to do the above calculations at the HSE level, but the first-order term is not currently feasible at the HSE level in large supercells (i.e., ~1500 calculations $\times$ ~7 hours per calculation for a 4x4x4 supercell on 768 processors). Both terms should be done at the same level, so the wave functions for the zeroth-order term should not be done at the HSE level at this point.</div>
 
-<p>We also need accurate energies for the delta function and matrix elements, but each of the band edges <em>and</em> the defect level within the gap are inaccurate, but they are not easily corrected (see <a href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.78.235104" target="_blank">this paper on correction methods</a>). Normally with total energy differences the errors cancel out; however, our calculations involve promoting an electron from the defect level to the conduction band minimum, which brings the errors in each of those bands into the calculation.</p>
+<p>The wave functions and energies are extracted using <a href="#export"><code class="language-plaintext highlighter-rouge">Export</code></a>. For any calculations where only the final positions are needed, it is not required to do an SCF calculation after or to run [<code class="language-plaintext highlighter-rouge">Export</code>][#export].</p>
 
-<p>The best approach to handling this error is to use HSE total energies for each of the systems. This HSE total energy should only be taken from one k-point because the defect level will have some artificial dispersion due to the finite supercell size. We use the gamma point because, in general, the error at gamma is considered to be the smallest. If that is found to not be the case, another k-point should be used to further minimize the error.</p>
+<h3 id="total-energies-and-eigenvalues">Total energies and eigenvalues</h3>
 
-<p>If you are using a gamma-only k-point grid, the eigenvalues from the HSE level should be used as they are most accurate. For larger grids, however, the PBE eigenvalues can be used because the differences between bands within the conduction and valence bands are relatively accurate and HSE calculations at all k-points may not be feasible.</p>
+<p>Capture involves promoting carriers between band states and defect states, which means that the errors in the band gap and defect levels within the gap do not cancel in total-energy differences. These error are not easily corrected (see <a href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.78.235104" target="_blank">this paper on correction methods</a>).</p>
 
-<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The zeroth-order term can easily be done with a denser k-point mesh, but it is not currently feasible to use multiple k-points at the supercell sizes that we use. If it becomes feasible, keep in mind that there are issues with correcting the PBE eigenvalues needed for the first-order matrix elements (see the <a href="calculations_energy-tabulator"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> page for more details).</div>
+<p>The best approach to handling this error is to use HSE total energies for each of the systems. This HSE total energy should only be taken from one k-point because the defect level will have some artificial dispersion due to the finite supercell size. We use the $\Gamma$-point because, in general, the error at gamma is considered to be the smallest. If that is found to not be the case, another k-point should be used to further minimize the error.</p>
 
-<p>The wave functions and energies are extracted using <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a>. For any calculations where only the final positions are needed, it is not required to do an SCF calculation after or to run <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a>.
-It is recommended to extract the energies (using <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a>) from the ground-state system in the initial relaxed positions.</p>
+<p>If you are using a $\Gamma$-only k-point grid, the eigenvalues from the HSE level should be used as they are most accurate. For larger grids, however, the PBE eigenvalues can be used because the differences between bands within the conduction and valence bands are relatively accurate and HSE calculations at all k-points may not be feasible.</p>
 
-<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> currently only works with the standard version of VASP or to export only the energies from results from the gamma-only version of VASP. Assumptions made in the code are not compatible with the noncollinear version.</div>
+<h2 id="vasp">VASP</h2>
 
-<h2 id="recommended-order">Recommended order</h2>
+<h3 id="recommended-order">Recommended order</h3>
 
 <p>To run the VASP calculations, you must set up your perfect-crystal and defect-crystal supercells. The recommended order for this is</p>
 <ul>
@@ -463,23 +455,25 @@ It is recommended to extract the energies (using <a href="calculations_energy-ta
   <li>NSCF at full k-point grid (<code class="language-plaintext highlighter-rouge">ICHARG=11</code>)</li>
 </ul>
 
-<p>For HSE calculations, start from a preconverged PBE calculation for speed. The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> code is not currently implemented for the gamma-only version of VASP, except for exporting the energies only, so keep that in mind when running HSE calculations especially. If you do use the gamma-only version to get accurate HSE energies, make sure that your preconverged PBE calculation was run using the gamma-only version as well, otherwise you will get an error saying <code class="language-plaintext highlighter-rouge">plane wave coefficients changed</code>.</p>
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The <a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> can currently only export the wave functions from the standard version of VASP. The energies can be extracted from the standard and $\Gamma$-only versions. Assumptions made in the code are not compatible with the noncollinear version.</div>
 
-<h2 id="parameters">Parameters</h2>
+<p>For HSE calculations, start from a preconverged PBE calculation for speed. It is fastest to do HSE calculations with the $\Gamma$-only version of VASP, but keep in mind the current limitations of the <a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> code. If you do use the $\Gamma$-only version to get accurate HSE energies, make sure that your preconverged PBE calculation was run using the $\Gamma$-only version as well, otherwise you will get an error saying <code class="language-plaintext highlighter-rouge">plane wave coefficients changed</code>.</p>
 
-<h3 id="ediff"><a href="https://www.vasp.at/wiki/index.php/EDIFF" target="_blank"><code class="language-plaintext highlighter-rouge">EDIFF</code></a></h3>
+<h3 id="parameters">Parameters</h3>
 
-<p>For the relaxations, it is okay to use a looser <code class="language-plaintext highlighter-rouge">EDIFF</code> like <code class="language-plaintext highlighter-rouge">1e-5</code>, but we use the wave functions from the SCF calculations, so the convergence criteria must be tighter for those. We have used <code class="language-plaintext highlighter-rouge">1e-8</code> in the past. To ensure that your convergence is tight enough, run the <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code with the same system input for both <code class="language-plaintext highlighter-rouge">PC</code> and <code class="language-plaintext highlighter-rouge">SD</code> and a small set of bands used for the initial state and final state. Check the <code class="language-plaintext highlighter-rouge">|&lt;f|i&gt;|^2</code> column in the <code class="language-plaintext highlighter-rouge">allElecOverlap.*.*</code> file to ensure that the bands are orthonormal. For the same initial and final band, the overlap should be close to 1. For different initial and final bands, the overlap should be close to zero (<code class="language-plaintext highlighter-rouge">~1e-10</code> is usually good).</p>
+<h4 id="ediff"><a href="https://www.vasp.at/wiki/index.php/EDIFF" target="_blank"><code class="language-plaintext highlighter-rouge">EDIFF</code></a></h4>
 
-<h3 id="isym"><a href="https://www.vasp.at/wiki/index.php/ISYM" target="_blank"><code class="language-plaintext highlighter-rouge">ISYM</code></a></h3>
+<p>For the relaxations, it is okay to use a looser <code class="language-plaintext highlighter-rouge">EDIFF</code> like <code class="language-plaintext highlighter-rouge">1e-5</code>, but we use the wave functions from the SCF calculations, so the convergence criteria must be tighter for those. We have used <code class="language-plaintext highlighter-rouge">1e-8</code> in the past. To ensure that your convergence is tight enough, run the <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code with the same system input for both <code class="language-plaintext highlighter-rouge">PC</code> and <code class="language-plaintext highlighter-rouge">SD</code> and a small set of bands used for the initial state and final state. Check the <code class="language-plaintext highlighter-rouge">|&lt;f|i&gt;|^2</code> column in the <code class="language-plaintext highlighter-rouge">allElecOverlap.*.*</code> file to ensure that the bands are orthonormal. For the same initial and final band, the overlap should be close to 1. For different initial and final bands, the overlap should be close to zero (<code class="language-plaintext highlighter-rouge">~1e-10</code> is usually good).</p>
+
+<h4 id="isym"><a href="https://www.vasp.at/wiki/index.php/ISYM" target="_blank"><code class="language-plaintext highlighter-rouge">ISYM</code></a></h4>
 
 <p>Our code is not currently implemented with symmetrization, so symmetry must be completely turned off with <code class="language-plaintext highlighter-rouge">ISYM=-1</code>.</p>
 
-<h3 id="ispin"><a href="https://www.vasp.at/wiki/index.php/ISPIN" target="_blank"><code class="language-plaintext highlighter-rouge">ISPIN</code></a></h3>
+<h4 id="ispin"><a href="https://www.vasp.at/wiki/index.php/ISPIN" target="_blank"><code class="language-plaintext highlighter-rouge">ISPIN</code></a></h4>
 
-<p>Make sure that the proper choice of <code class="language-plaintext highlighter-rouge">ISPIN</code> is used for each of your calculations. The <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> and <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> codes handle spin polarization automatically, so it is not required to use the same setting for every system.</p>
+<p>Make sure that the proper choice of <code class="language-plaintext highlighter-rouge">ISPIN</code> is used for each of your calculations. The <a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> and <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> codes handle spin polarization automatically, so it is not required to use the same setting for every system.</p>
 
-<h3 id="nbands"><a href="https://www.vasp.at/wiki/index.php/NBANDS" target="_blank"><code class="language-plaintext highlighter-rouge">NBANDS</code></a></h3>
+<h4 id="nbands"><a href="https://www.vasp.at/wiki/index.php/NBANDS" target="_blank"><code class="language-plaintext highlighter-rouge">NBANDS</code></a></h4>
 
 <p>From the VASP wiki:</p>
 <blockquote>
@@ -488,7 +482,7 @@ It is recommended to extract the energies (using <a href="calculations_energy-ta
 
 <p>The default setting in VASP already includes extra bands above the filled states to get better convergence; however, we need accurate calculations of both occupied and unoccupied states when considering electron capture. For electron capture, ensure that <code class="language-plaintext highlighter-rouge">NBANDS</code> is set so that there are plenty empty bands <em>above the empty states that you are using for your initial electron states.</em> The default value from VASP is <code class="language-plaintext highlighter-rouge">NELECT/2+NIONS/2</code>. You should at least increase above the default by the number of unoccupied states that you need.</p>
 
-<h3 id="ncore"><a href="https://www.vasp.at/wiki/index.php/NCORE" target="_blank"><code class="language-plaintext highlighter-rouge">NCORE</code></a></h3>
+<h4 id="ncore"><a href="https://www.vasp.at/wiki/index.php/NCORE" target="_blank"><code class="language-plaintext highlighter-rouge">NCORE</code></a></h4>
 
 <p><code class="language-plaintext highlighter-rouge">NCORE</code> sets the number of bands per group. It is related to <code class="language-plaintext highlighter-rouge">NPAR</code>, which is the number of bands that are treated in parallel. The recommended settings on the wiki are <code class="language-plaintext highlighter-rouge">NPAR = sqrt(number-of-cores)</code> or <code class="language-plaintext highlighter-rouge">NCORE = cores-per-node</code>. The relationship between <code class="language-plaintext highlighter-rouge">NPAR</code> and <code class="language-plaintext highlighter-rouge">NCORE</code> is <code class="language-plaintext highlighter-rouge">NCORE = number-of-cores/KPAR/NPAR</code>.</p>
 
@@ -501,12 +495,28 @@ It is recommended to extract the energies (using <a href="calculations_energy-ta
   <li>If these values don’t line up, VASP will automatically adjust the numbers of bands, which can lead to issues if you are setting the occupations manually using <code class="language-plaintext highlighter-rouge">FERWE/FERDO</code></li>
 </ul>
 
-<h3 id="kpar"><a href="https://www.vasp.at/wiki/index.php/KPAR" target="_blank"><code class="language-plaintext highlighter-rouge">KPAR</code></a></h3>
+<h4 id="kpar"><a href="https://www.vasp.at/wiki/index.php/KPAR" target="_blank"><code class="language-plaintext highlighter-rouge">KPAR</code></a></h4>
 
 <p><code class="language-plaintext highlighter-rouge">KPAR</code> should be an integer divisor of the total number of cores. The number of processors working on a group of k-points is <code class="language-plaintext highlighter-rouge">number-of-cores/KPAR</code>. Try not to let the number of processors working on a group split across nodes (i.e., make <code class="language-plaintext highlighter-rouge">number-of-cores/KPAR</code> an integer divisor of the number of cores per node). Also, try to have the same number of k-points in each group (i.e., make <code class="language-plaintext highlighter-rouge">KPAR</code> an integer divisor of the number of unique k-points) or at least balance the load as best as possible. As an example, with 10 k-points you could have 5 groups working on 2 k-points each, but you wouldn’t want 8 groups because then 6 groups would be idle while the two groups with 2 k-points work on their second point.</p>
 
 <p>In VASP, the k-points are split up first, then bands. To be safe, you can set the bands and processors based on <code class="language-plaintext highlighter-rouge">NCORE</code>, then set <code class="language-plaintext highlighter-rouge">KPAR</code> based on number of k-points and multiply the number of nodes by <code class="language-plaintext highlighter-rouge">KPAR</code></p>
 
+<h2 id="export">Export</h2>
+
+<p>Once the VASP calculations are complete, the information needs to be exported to be fed into the next calculations in line. For <a href="zeroth-order-capture.html">zeroth-order capture</a>, you only need the wave functions from the perfect crystal and the final charge state in the relaxed initial positions.</p>
+
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The <a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> assumes that the VASP calculation was SCF and not relax, otherwise total energy may be extracted incorrectly; However, you should always do an SCF calculation after relaxation anyways if you need anything other than the final positions.</div>
+
+<p>To export the wave functions, you should use an input file like</p>
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&amp;</span><span class="n">inputParams</span><span class="w">
+  </span><span class="n">VASPDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'path-to-VASP-output'</span><span class="w">                       </span><span class="c1">! default './'</span><span class="w">
+  </span><span class="n">exportDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'path-to-put-exported-files'</span><span class="w">              </span><span class="c1">! default './Export'</span><span class="w">
+  </span><span class="n">gammaOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.false.</span><span class="w">
+  </span><span class="n">energiesOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.false.</span><span class="w">
+</span><span class="p">/</span><span class="w">
+</span></code></pre></div></div>
+
+<p>For systems that you only need to extract the energies from (total energy and eigenvalues), use <code class="language-plaintext highlighter-rouge">energiesOnly = .true.</code>. The extracted energies get fed into the <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> to tabulate the various energies needed for different parts of the theory.</p>
 
 
     <div class="tags">
@@ -533,7 +543,7 @@ It is recommended to extract the energies (using <a href="calculations_energy-ta
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Sep 21, 2023 <br />
+ Site last generated: Dec 19, 2023 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>

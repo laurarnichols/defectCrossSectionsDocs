@@ -259,14 +259,7 @@
           
           
           
-          <li><a title="VASP" href="vasp.html">VASP</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Export" href="calculations_export.html">Export</a></li>
+          <li><a title="VASP and Export" href="vasp-and-export.html">VASP and Export</a></li>
           
           
           
@@ -294,14 +287,14 @@
           
           
           
-          <li><a title="TME" href="calculations_tme.html">TME</a></li>
+          <li><a title="Zeroth-order capture" href="zeroth-order-capture.html">Zeroth-order capture</a></li>
           
           
           
           
           
           
-          <li><a title="LSF" href="calculations_lsf.html">LSF</a></li>
+          <li><a title="First-order capture" href="first-order-capture.html">First-order capture</a></li>
           
           
           
@@ -421,7 +414,7 @@ $('#toc').on('click', 'a', function() {
 
 <p>However, most experimental conditions will have some kind of current, making the system nonequilibrium. For the nonequilibrium case, we must consider a carrier coming far away from the defect and being perturbed by the presence of the defect. Perturbation theory cannot be directly used for carrier for capture because the defect state cannot be constructed from a finite basis set of perfect-crystal Bloch states.</p>
 
-<p>The theory behind the capture formalism (originally developed in the <a href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.92.214111" target="_blank">Barmparis paper</a>) is based on defining a basis set where the initial band state is “decoupled” from the final defect band state. The wave functions are defect states with the coupling matrix element between the initial and final states removed. The coupling matrix element is used as a perturbation, and the full Hamiltonian is the full defect states.The transition rate is derived using Fermi’s golden rule. The wave functions start as many-body but the form of Fermi’s golden rule allows the orthonormality of the single-particle orbitals to be exploited to simplify (assuming the form of a Slater determinant).</p>
+<p>The theory behind the capture formalism (originally developed in the <a href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.92.214111" target="_blank">Barmparis paper</a>) is based on defining a basis set where the initial band state is “decoupled” from the final defect band state. The wave functions are defect states with the coupling matrix element between the initial and final states removed. The coupling matrix element is used as a perturbation, and the full Hamiltonian is the full defect system.The transition rate is derived using Fermi’s golden rule. The wave functions start as many-body but the form of Fermi’s golden rule allows the orthonormality of the single-particle orbitals to be exploited to simplify (assuming the form of a Slater determinant).</p>
 
 <p>The wave functions discussed above are only the electronic states. The electronic and vibrational states are decoupled using the <a href="#" data-toggle="tooltip" data-original-title="The Born-Oppenheimer approximation neglects the derivatives of the electronic wave functions with respect to the nuclear positions.">Born-Oppenheimer approximation.</a> The phonons come from the defect system. The phonon overlaps are transformed using a Fourier-like transform to a time-domain integral. Feynman’s path integral is then used to simplify the integrand.</p>
 
@@ -435,9 +428,9 @@ $('#toc').on('click', 'a', function() {
 
 <p>The final form of the transition rate for the zeroth-order is</p>
 
-\[\Gamma_i^{(0)} = \frac{2}{\hbar^2} \left|M_{\text{e}}^{\text{BO}} ( \{ \mathbf{R}_k^{(i)} \} ) \right|^2 \text{ Re} \int_0^{\infty} G^{(0)}(t) e^{i E_{if}^{\text{DFT}} t/\hbar - \gamma t} \,dt.\]
+\[\Gamma_i^{(0)} = \frac{2}{\hbar^2}g \left|M_{\text{e}}^{\text{BO}} ( \{ \mathbf{R}_k^{(i)} \} ) \right|^2 \text{ Re} \int_0^{\infty} G^{(0)}(t) e^{i E_{if}^{\text{DFT}} t/\hbar - \gamma t} \,dt\]
 
-<p>I will explain each component of this equation and how it relates to the code in the sections below.</p>
+<p>where $g$ is a degeneracy factor for the summing over (nearly) degenerate final electronic states. I will explain the main components of this equation and how it relates to the code in the sections below.</p>
 
 <div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The derivation of the zeroth-order term assumes that the carrier is coming from far away from the defect and gets perturbed by the coupling with the defect as it approaches. This treatment is only valid for nonequilibrium capture. In principle, most experiments will be nonequilibrium because they will have some current; however, when comparing to truly equilibrium conditions, the zeroth-order term should not be present. The first-order term should be present in either case because the perturbation from electron-phonon coupling always exists.</div>
 
@@ -445,15 +438,13 @@ $('#toc').on('click', 'a', function() {
 
 <p>$M_{\text{e}}^{\text{BO}}( \{ \mathbf{R}_k^{(i)} \} )$ is the zeroth-order matrix element:</p>
 
-\[M_{\text{e}}^{\text{BO}} ( \{ \mathbf{R}_k^{(i)} \} ) = \langle\phi_f| \psi_i^0 \rangle \left[ E_{f}^{\text{DFT}}(\{R_k^{(i)}\}) - E_{i}^{\text{DFT}}(\{R_k^{(i)}\}) \right]\]
+\[M_{\text{e}}^{\text{BO}} ( \{ \mathbf{R}_k^{(i)} \} ) = \langle\phi_f| \phi_i^0 \rangle \left[ E_{f}(\{ {\bf R}_k^{(i)}\}) - E_{i}(\{ {\bf R}_k^{(i)}\}) \right]\]
 
-<p>This matrix element is calculated in the <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code. $|\phi_f \rangle$ is the single-particle final defect state taken from the <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> of the SCF calculation on the <strong>final charge state in the initial positions</strong>. $|\psi_i^0 \rangle$ is the single-particle initial perfect-crystal Bloch state taken from the <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> of the SCF calculation on the pristine supercell.</p>
+<p>This matrix element is calculated in the <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code. $|\phi_f \rangle$ is the single-particle final defect state taken from the <a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> of the SCF calculation on the <strong>final charge state in the initial positions</strong>. $|\phi_i^0 \rangle$ is the single-particle initial perfect-crystal Bloch state taken from the <a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> of the SCF calculation on the pristine supercell.</p>
 
-<p>The energy difference in $M_{\text{e}}^{\text{BO}}$ is the many-body electronic-only energy difference from just the carrier changing state. It is based on the total DFT energy difference between the defect system in the different charge states but in the initial relaxed positions ($\{R_k^{(i)}\}$). The other energy ($E_{if}^{\text{DFT}}$) in the exponential is defined as</p>
+<p>The energy difference in $M_{\text{e}}^{\text{BO}}$ is the many-body electronic-only energy difference from just the carrier changing state. We use the total energy difference between the two charge states in the initial positions:</p>
 
-\[E_{if}^{\text{DFT}} \equiv E_{f}^{\text{DFT}}(\{R_k^{(f)}\}) - E_{i}^{\text{DFT}}(\{R_k^{(i)}\}),\]
-
-<p>which is the total energy difference between the two relaxed charge states. Both energies are calculated in the <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> code. More details on the exact form of the energies are given on that documentation page.</p>
+\[W_{f}( \{ {\bf R}_k^{(i)}\}) - W_{i}( \{ {\bf R}_k^{(i)} \} ) \approx W_{f}( \{ {\bf R}_k^{(i)} \} ) - \left[ W_{\text{ref}}( \{ {\bf R}_k^{(i)} \} ) + \varepsilon_{i} - \varepsilon_{\text{ref}} \right].\]
 
 <h3 id="time-domain-integral-and-kernel">Time-domain integral and kernel</h3>
 
@@ -469,7 +460,7 @@ $('#toc').on('click', 'a', function() {
 
 \[\bar{n}_j = \frac{1}{e^{\beta \hbar \omega_j}-1}.\]
 
-<p>The Huang-Rhys factor includes $\Delta q_j$, which is the projection of the displacement vector between the relaxed positions of the two charge states onto the phonon eigenvectors of mode $j$. The $\Delta q_j$, $\omega_j$, and $S_j$ are tabulated in the <a href="calculations_phononpp.html"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> code. The final transition rate is then calculated by the <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> code, which primarily does the time-domain integral.</p>
+<p>The Huang-Rhys factor includes $\Delta q_j$, which is the projection of the displacement vector between the relaxed positions of the two charge states onto the phonon eigenvectors of mode $j$. The $\Delta q_j$, $\omega_j$, and $S_j$ are tabulated in the <a href="calculations_phononpp.html"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> code. The final transition rate is then calculated by the <a href="code_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> code, which primarily does the time-domain integral.</p>
 
 
 
@@ -497,7 +488,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Sep 21, 2023 <br />
+ Site last generated: Dec 19, 2023 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>

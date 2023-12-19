@@ -44,12 +44,8 @@ entries:
     output: web, pdf
     folderitems:
 
-    - title: VASP
-      url: /vasp.html
-      output: web, pdf
-
-    - title: Export
-      url: /calculations_export.html
+    - title: VASP and Export
+      url: /vasp-and-export.html
       output: web, pdf
 
     - title: Energy tabulator
@@ -64,12 +60,12 @@ entries:
       url: /calculations_phononpp.html
       output: web, pdf
 
-    - title: TME
-      url: /calculations_tme.html
+    - title: Zeroth-order capture
+      url: /zeroth-order-capture.html
       output: web, pdf
 
-    - title: LSF
-      url: /calculations_lsf.html
+    - title: First-order capture
+      url: /first-order-capture.html
       output: web, pdf
       
   - title: Code

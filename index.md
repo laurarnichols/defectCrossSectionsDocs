@@ -26,7 +26,7 @@ The following VASP calculations are needed for a capture calculation:
 * relaxed initial charge state (plus SCF after)
 * final charge state in initial positions
 
-See the [VASP][vasp] page to find details on how the calculations should be set up and the suggested order of running the calculations.
+See the [VASP and Export][vasp-and-export] page to find details on how the calculations should be set up and the suggested order of running the calculations.
 
 The results must then be post-processed by the `Export` code to be used as input to the other programs in the suite. Once the VASP results are exported, the raw files are not needed again. Some of the items exported are:
 * wave functions
@@ -35,15 +35,15 @@ The results must then be post-processed by the `Export` code to be used as input
 * plane-wave grid
 * pseudopotential
 
-See the [`Export`][calculations_export] page for more details on how to run the `Export` code and what outputs to expect.
+See the [VASP and Export][vasp-and-export] page for more details on how to run the `Export` code and what outputs to expect.
 
 ## Energy tabulation
 
-There are difference energies used in different parts of the theory. Instead of calculating the different energies in different places, the `EnergyTabulator` code is used to gather the energy information from the exported data from the various systems and tabulate all of the needed energies for use in the `TME` and `LSF` codes. See the [`EnergyTabulator`][calculations_energy-tabulator] page for more details.
+There are multiple different energies used in different parts of the theory. Instead of calculating the different energies in different places, the `EnergyTabulator` code is used to gather the energy information from the exported data from the various systems and tabulate all of the needed energies for use in the `TME` and `LSF` codes. See the [`EnergyTabulator`][calculations_energy-tabulator] page for more details.
 
 ## Phonons and phonon post-processing
 
-The phonon eigenvectors and frequencies are needed to determine how the electronic-transition energy is dissipated into each of the phonon modes. It is assumed that eigenvectors and frequencies of the phonons in the initial and final relaxed positions are the same. Consequently, it does not matter which equilibrium positions are used for the phonon calculations; however, it is recommended to use the ground electronic state of the system for faster convergence of the phonon calculations. 
+The phonon eigenvectors and frequencies are needed to determine how the electronic-transition energy is dissipated into each of the phonon modes. It is assumed that frequencies of the phonons in the initial and final charge states are the same, but the eigenvectors may change. Consequently, it is best to use the final-charge-state phonons. However, it may be okay to use the ground electronic state of the system for faster convergence of the phonon calculations. The atoms should be in the initial relaxed positions either way.
 
 The phonon post-processing code (`PhononPP`) is then used to generate positions shifted along each eigenvector (needed for the first-order matrix element) and the Huang-Rhys factor (needed for distributing the energy across the modes in the `LSF` code). `PhononPP` is currently set up to read the required information in the form of the `mesh.yaml` output by `Phonopy`. 
 
@@ -53,7 +53,7 @@ Check out the [Phonons][phonons] and [`PhononPP`][calculations_phononpp] pages f
 
 {% include note.html content="The zeroth-order term is only valid for nonequilibrium capture. See the [theory][theory] page for more details." %}
 
-The zeroth-order transition rate is straightforward to calculate: run the `TME` and `LSF` codes with `order=0`. The [`TME`][calculations_tme] code calculates the transition matrix element, then the [`LSF`][calculations_lsf] code does the time-domain integral to get the final transition rate. 
+The [zeroth-order transition rate][zeroth-order-capture] is straightforward to calculate: run the `TME` and `LSF` codes with `order=0`. The [`TME`][code_tme] code calculates the transition matrix element, then the [`LSF`][code_lsf] code does the time-domain integral to get the final transition rate. 
 
 ## First-order
 

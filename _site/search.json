@@ -6,7 +6,7 @@
 "tags": "energy-tabulator",
 "keywords": "energy",
 "url": "calculations_energy-tabulator.html",
-"summary": "Include a summary of this page."
+"summary": "This page gives an overview of the energies required in the theory and how to run the EnergyTabulator code."
 }
 ,
 
@@ -20,20 +20,20 @@
 ,
 
 {
-"title": "Export Calculations",
-"tags": "export",
-"keywords": "export",
-"url": "calculations_export.html",
-"summary": "This page gives a summary of the Export code, including how to run, required inputs, and expected outputs."
-}
-,
-
-{
 "title": "Export Code",
 "tags": "export",
 "keywords": "export",
 "url": "code_export.html",
 "summary": "This page gives a summary of the Export code, including how to run, required inputs, and expected outputs."
+}
+,
+
+{
+"title": "First-Order Capture",
+"tags": "capture",
+"keywords": "first capture",
+"url": "first-order-capture.html",
+"summary": "This page gives a summary of the calculations needed to get the first-order term for capture."
 }
 ,
 
@@ -52,15 +52,6 @@
 "keywords": "homepage introduction",
 "url": "index.html",
 "summary": ""
-}
-,
-
-{
-"title": "LSF Calculations",
-"tags": "phonons line-shape-function",
-"keywords": "line shape function phonons dissipation",
-"url": "calculations_lsf.html",
-"summary": "Include a summary of this page."
 }
 ,
 
@@ -110,15 +101,6 @@
 ,
 
 {
-"title": "TME Calculations",
-"tags": "electronic tme",
-"keywords": "electronic transition matrix elements",
-"url": "calculations_tme.html",
-"summary": "Include a summary of this page."
-}
-,
-
-{
 "title": "TME Code",
 "tags": "electronic tme",
 "keywords": "electronic transition matrix elements",
@@ -137,11 +119,20 @@
 ,
 
 {
-"title": "VASP",
-"tags": "vasp",
-"keywords": "vasp",
-"url": "vasp.html",
-"summary": "This page gives a summary of the VASP calculations needed for a capture calculation, including parameter specifications and tips."
+"title": "VASP and Export",
+"tags": "vasp export",
+"keywords": "vasp export",
+"url": "vasp-and-export.html",
+"summary": "This page gives a summary of the VASP calculations needed for a capture calculation, including parameter specifications and tips, followed by details on how to Export those results for input into subsequent calculations."
+}
+,
+
+{
+"title": "Zeroth-Order Capture",
+"tags": "capture",
+"keywords": "zeroth capture",
+"url": "zeroth-order-capture.html",
+"summary": "This page gives a summary of the calculations needed to get the zeroth-order term for capture."
 }
 ,
 

@@ -259,14 +259,7 @@
           
           
           
-          <li><a title="VASP" href="vasp.html">VASP</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Export" href="calculations_export.html">Export</a></li>
+          <li><a title="VASP and Export" href="vasp-and-export.html">VASP and Export</a></li>
           
           
           
@@ -294,14 +287,14 @@
           
           
           
-          <li><a title="TME" href="calculations_tme.html">TME</a></li>
+          <li><a title="Zeroth-order capture" href="zeroth-order-capture.html">Zeroth-order capture</a></li>
           
           
           
           
           
           
-          <li><a title="LSF" href="calculations_lsf.html">LSF</a></li>
+          <li><a title="First-order capture" href="first-order-capture.html">First-order capture</a></li>
           
           
           
@@ -435,7 +428,7 @@ $('#toc').on('click', 'a', function() {
   <li>final charge state in initial positions</li>
 </ul>
 
-<p>See the <a href="vasp.html">VASP</a> page to find details on how the calculations should be set up and the suggested order of running the calculations.</p>
+<p>See the <a href="vasp-and-export.html">VASP and Export</a> page to find details on how the calculations should be set up and the suggested order of running the calculations.</p>
 
 <p>The results must then be post-processed by the <code class="language-plaintext highlighter-rouge">Export</code> code to be used as input to the other programs in the suite. Once the VASP results are exported, the raw files are not needed again. Some of the items exported are:</p>
 <ul>
@@ -446,15 +439,15 @@ $('#toc').on('click', 'a', function() {
   <li>pseudopotential</li>
 </ul>
 
-<p>See the <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> page for more details on how to run the <code class="language-plaintext highlighter-rouge">Export</code> code and what outputs to expect.</p>
+<p>See the <a href="vasp-and-export.html">VASP and Export</a> page for more details on how to run the <code class="language-plaintext highlighter-rouge">Export</code> code and what outputs to expect.</p>
 
 <h2 id="energy-tabulation">Energy tabulation</h2>
 
-<p>There are difference energies used in different parts of the theory. Instead of calculating the different energies in different places, the <code class="language-plaintext highlighter-rouge">EnergyTabulator</code> code is used to gather the energy information from the exported data from the various systems and tabulate all of the needed energies for use in the <code class="language-plaintext highlighter-rouge">TME</code> and <code class="language-plaintext highlighter-rouge">LSF</code> codes. See the <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> page for more details.</p>
+<p>There are multiple different energies used in different parts of the theory. Instead of calculating the different energies in different places, the <code class="language-plaintext highlighter-rouge">EnergyTabulator</code> code is used to gather the energy information from the exported data from the various systems and tabulate all of the needed energies for use in the <code class="language-plaintext highlighter-rouge">TME</code> and <code class="language-plaintext highlighter-rouge">LSF</code> codes. See the <a href="calculations_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> page for more details.</p>
 
 <h2 id="phonons-and-phonon-post-processing">Phonons and phonon post-processing</h2>
 
-<p>The phonon eigenvectors and frequencies are needed to determine how the electronic-transition energy is dissipated into each of the phonon modes. It is assumed that eigenvectors and frequencies of the phonons in the initial and final relaxed positions are the same. Consequently, it does not matter which equilibrium positions are used for the phonon calculations; however, it is recommended to use the ground electronic state of the system for faster convergence of the phonon calculations.</p>
+<p>The phonon eigenvectors and frequencies are needed to determine how the electronic-transition energy is dissipated into each of the phonon modes. It is assumed that frequencies of the phonons in the initial and final charge states are the same, but the eigenvectors may change. Consequently, it is best to use the final-charge-state phonons. However, it may be okay to use the ground electronic state of the system for faster convergence of the phonon calculations. The atoms should be in the initial relaxed positions either way.</p>
 
 <p>The phonon post-processing code (<code class="language-plaintext highlighter-rouge">PhononPP</code>) is then used to generate positions shifted along each eigenvector (needed for the first-order matrix element) and the Huang-Rhys factor (needed for distributing the energy across the modes in the <code class="language-plaintext highlighter-rouge">LSF</code> code). <code class="language-plaintext highlighter-rouge">PhononPP</code> is currently set up to read the required information in the form of the <code class="language-plaintext highlighter-rouge">mesh.yaml</code> output by <code class="language-plaintext highlighter-rouge">Phonopy</code>.</p>
 
@@ -464,7 +457,7 @@ $('#toc').on('click', 'a', function() {
 
 <div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The zeroth-order term is only valid for nonequilibrium capture. See the <a href="theory.html">theory</a> page for more details.</div>
 
-<p>The zeroth-order transition rate is straightforward to calculate: run the <code class="language-plaintext highlighter-rouge">TME</code> and <code class="language-plaintext highlighter-rouge">LSF</code> codes with <code class="language-plaintext highlighter-rouge">order=0</code>. The <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code calculates the transition matrix element, then the <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> code does the time-domain integral to get the final transition rate.</p>
+<p>The <a href="zeroth-order-capture.html">zeroth-order transition rate</a> is straightforward to calculate: run the <code class="language-plaintext highlighter-rouge">TME</code> and <code class="language-plaintext highlighter-rouge">LSF</code> codes with <code class="language-plaintext highlighter-rouge">order=0</code>. The <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code calculates the transition matrix element, then the <a href="code_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> code does the time-domain integral to get the final transition rate.</p>
 
 <h2 id="first-order">First-order</h2>
 
@@ -512,7 +505,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Sep 21, 2023 <br />
+ Site last generated: Dec 19, 2023 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>

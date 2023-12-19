@@ -259,14 +259,7 @@
           
           
           
-          <li><a title="VASP" href="vasp.html">VASP</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Export" href="calculations_export.html">Export</a></li>
+          <li><a title="VASP and Export" href="vasp-and-export.html">VASP and Export</a></li>
           
           
           
@@ -294,14 +287,14 @@
           
           
           
-          <li><a title="TME" href="calculations_tme.html">TME</a></li>
+          <li><a title="Zeroth-order capture" href="zeroth-order-capture.html">Zeroth-order capture</a></li>
           
           
           
           
           
           
-          <li><a title="LSF" href="calculations_lsf.html">LSF</a></li>
+          <li><a title="First-order capture" href="first-order-capture.html">First-order capture</a></li>
           
           
           
@@ -417,7 +410,7 @@ $('#toc').on('click', 'a', function() {
 
    <h2 id="problem-definition">Problem definition</h2>
 
-<p>This tutorial will consider the positive-to-neutral transition. We use the <a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.105501" target="_blank">WZP</a> method to accomplish our desired charge states without affecting the neutrality of the supercell. The ground state of this defect is neutral with a singly-occupied defect. To get the positive charge state, we excite the electron out of the defect level into the conduction band.</p>
+<p>This tutorial will consider the positive-to-neutral transition of a triply-hydrogenated silicon vacancy. We use the <a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.105501" target="_blank">WZP</a> method to accomplish our desired charge states without affecting the neutrality of the supercell. The ground state of this defect is neutral with a singly-occupied defect. To get the positive charge state, we excite the electron out of the defect level into the conduction band.</p>
 
 <h2 id="vasp-and-export">VASP and Export</h2>
 
@@ -481,33 +474,34 @@ Direct
 </span></code></pre></div>    </div>
     <p><em>The <code class="language-plaintext highlighter-rouge">!</code> characters on the blank lines are needed for the above code block to be formatted correctly, but they serve no purpose in the actual file.</em> <strong>Only the gamma point should be used for all of the VASP calculations in this example.</strong></p>
   </li>
-  <li>Follow with an SCF calculation with a tighter <code class="language-plaintext highlighter-rouge">EDIFF=1e-8</code> and more bands. We used around 1500, but make sure that the number of bands that you choose fits the number of processes you are running on (see the <a href="vasp.html#nbands"><code class="language-plaintext highlighter-rouge">NBANDS</code> and <code class="language-plaintext highlighter-rouge">NCORE</code> sections on the VASP page</a>).</li>
+  <li>Follow with an SCF calculation with a tighter <code class="language-plaintext highlighter-rouge">EDIFF=1e-8</code> and more bands. We used around 1500, but make sure that the number of bands that you choose fits the number of processes you are running on (see the <a href="vasp-and-export.html#nbands"><code class="language-plaintext highlighter-rouge">NBANDS</code> and <code class="language-plaintext highlighter-rouge">NCORE</code> sections on the VASP and Export page</a>).</li>
   <li>In the center of the supercell, introduce the defect. In this case, remove a silicon atom close to the center and add 3 hydrogen atoms along the previously-existing bonds. One silicon atom will retain a dangling bond, which is the defect level.</li>
   <li>Relax the inner DOF in the ground state, then run the required SCF calculation to fix the charge density for the last relaxation step.</li>
   <li>Use the converged <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code> as the starting point for the postive-charge-state relaxation. To get the positive charge state, use
     <div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ISMEAR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-2</span><span class="w">
-</span><span class="n">FERWE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1022</span><span class="o">*</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">535</span><span class="o">*</span><span class="mi">0</span><span class="w">
-</span><span class="n">FERDO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1022</span><span class="o">*</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">535</span><span class="o">*</span><span class="mi">0</span><span class="w">
+</span><span class="n">FERWE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1022</span><span class="o">*</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="mi">535</span><span class="o">*</span><span class="mi">0</span><span class="w">
+</span><span class="n">FERDO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1022</span><span class="o">*</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="mi">535</span><span class="o">*</span><span class="mi">0</span><span class="w">
 </span></code></pre></div>    </div>
-    <p><code class="language-plaintext highlighter-rouge">FERWE</code> sets the spin-up occupations and <code class="language-plaintext highlighter-rouge">FERDO</code> sets the spin-down occupations. The numbers given are for a choice of 1560 bands. Make sure that your number of bands aligns with your <a href="vasp.html#ncore">parallelization criteria</a>, otherwise VASP may automatically adjust it, messing up the manual occupations. I like to have the band extrema and the defect levels written explicitly for easier visualization in different files, but that is not required.</p>
+    <p><code class="language-plaintext highlighter-rouge">FERWE</code> sets the spin-up occupations and <code class="language-plaintext highlighter-rouge">FERDO</code> sets the spin-down occupations. The numbers given are for a choice of 1560 bands. Make sure that your number of bands aligns with your <a href="vasp-and-export.html#ncore">parallelization criteria</a>, otherwise VASP may automatically adjust it, messing up the manual occupations. I like to have the band extrema and the defect levels written explicitly for easier visualization in different files, but that is not required. Note that the excited electron is split across the spin channels to remove any artificial spin-orbit coupling with the defect.</p>
   </li>
   <li>Use the relaxed positive-charge state positions and run a ground-state SCF calculation with the same parameters as the pristine SCF calculation.</li>
-  <li><a href="calculations_export"><code class="language-plaintext highlighter-rouge">Export</code></a> the pristine supercell calculation and the ground-state-defect/positive-state-positions (you only need to set <code class="language-plaintext highlighter-rouge">VASPDir</code> and <code class="language-plaintext highlighter-rouge">exportDir</code> for these calculations).</li>
+  <li><a href="vasp-and-export.html#export"><code class="language-plaintext highlighter-rouge">Export</code></a> the pristine supercell calculation and the ground-state-defect/positive-state-positions to get the wave functions for the zeroth-order term (you only need to set <code class="language-plaintext highlighter-rouge">VASPDir</code> and <code class="language-plaintext highlighter-rouge">exportDir</code> for these calculations).</li>
 </ol>
 
 <p>To get the total energies, also do HSE SCF calculations for the relaxed positive charge state, the relaxed ground state, and the ground state at the positive relaxed positions. The gamma-only version of VASP can be used since we only need the energies. <a href="calculations_export"><code class="language-plaintext highlighter-rouge">Export</code></a> the HSE results with the option <code class="language-plaintext highlighter-rouge">energiesOnly = .true.</code> and <code class="language-plaintext highlighter-rouge">gammaOnly =.true.</code>, if applicable.</p>
 
 <h2 id="energytabulator">EnergyTabulator</h2>
 
-<p>Once all of the results are exported, run <a href="calculations_energy-tabulator"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> to calculate all of the required energies. Make sure to point <code class="language-plaintext highlighter-rouge">exportDirEigs</code> to the ground-state-HSE <code class="language-plaintext highlighter-rouge">Export</code> output. Since we are using HSE total energies and eigenvalues, we don’t need any energy corrections. The reference band should be set to where the carrier is in our calculations. In this case, the reference carrier is in the CBM:</p>
+<p>Once all of the results are exported, run <a href="calculations_energy-tabulator"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> to calculate all of the required energies. Make sure to point <code class="language-plaintext highlighter-rouge">exportDirEigs</code> to the ground-state-HSE <code class="language-plaintext highlighter-rouge">Export</code> output. Since we are using HSE total energies and eigenvalues, we don’t need any energy corrections. The reference band should be set to where the carrier is in our calculations. In this case, the reference carrier is in the lowest conduction band at the $\Gamma$-point:</p>
 <div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">refBand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1025</span><span class="w">
 </span></code></pre></div></div>
 <p>We are considering electron capture, so we should also set</p>
-<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CBMorVBMBand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1025</span><span class="w">
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">captured</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.true.</span><span class="w">
+</span><span class="n">elecCarrier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.true.</span><span class="w">
 </span></code></pre></div></div>
 <p>The initial and final band ranges should be set based on the initial and final states that you want to consider. For capture, there should be only one final state (the defect level), so we should use</p>
 <div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iBandFinit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="w">
-</span><span class="n">iBandIinit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="w">
+</span><span class="n">iBandFfinal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="w">
 </span></code></pre></div></div>
 <p>Include as many initial bands as you want to plot. We used</p>
 <div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iBandIinit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1025</span><span class="w">
@@ -519,186 +513,182 @@ Direct
 
 <p>Use some software to get the ground-state phonon eigenvectors and frequencies. We use <a href="https://phonopy.github.io/phonopy/" target="_blank">Phonopy</a> (see <a href="phonons">our documentation</a> on how to run a simple phonon calculation), but any software can be used as long as the result is the same YAML format.</p>
 
-<p>Once you have the phonons, run the <a href="calculations_phononpp"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> code to get all of the shifted positions needed for the first-order matrix elements and calculate the Huang-Rhys factor among other things needed as input to the <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> code. <em>You will want to run this in a clean directory because a shifted <code class="language-plaintext highlighter-rouge">POSCAR</code> will be output for each phonon mode.</em> We used <code class="language-plaintext highlighter-rouge">shift = 0.01</code> $\overset{\lower.5em\circ}{\mathrm{A}}$.</p>
+<p>Once you have the phonons, run the <a href="calculations_phononpp"><code class="language-plaintext highlighter-rouge">PhononPP</code></a> code to get all of the shifted positions needed for the first-order matrix elements and calculate the Huang-Rhys factor among other things needed as input to the <a href="code_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> code. <em>You will want to run this in a clean directory because a shifted <code class="language-plaintext highlighter-rouge">POSCAR</code> will be output for each phonon mode.</em> We used <code class="language-plaintext highlighter-rouge">shift = 0.01</code> $\overset{\lower.5em\circ}{\mathrm{A}}$.</p>
 
 <h2 id="zeroth-order">Zeroth-order</h2>
 
-<p>Getting the zeroth-order transition rate is pretty straightforward. First, run the <a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code with <code class="language-plaintext highlighter-rouge">order=0</code>, with <code class="language-plaintext highlighter-rouge">exportDirSD</code> pointing to the <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> output for the defect in the ground charge state and initial positions and <code class="language-plaintext highlighter-rouge">exportDirPC</code> pointing to the <code class="language-plaintext highlighter-rouge">Export</code> output for the perfect crystal. The same band ranges used in the <code class="language-plaintext highlighter-rouge">EnergyTabulator</code> code should be used here, and you should point to the energy tables.</p>
+<p>Getting the <a href="zeroth-order-capture.html">zeroth-order</a> transition rate is pretty straightforward. First, run the <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code with <code class="language-plaintext highlighter-rouge">order=0</code>, with <code class="language-plaintext highlighter-rouge">exportDirSD</code> pointing to the <a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> output for the defect in the ground charge state and initial positions and <code class="language-plaintext highlighter-rouge">exportDirPC</code> pointing to the <code class="language-plaintext highlighter-rouge">Export</code> output for the perfect crystal. The same band ranges used in the <code class="language-plaintext highlighter-rouge">EnergyTabulator</code> code should be used here, and you should point to the energy tables.</p>
 
-<p>Once that <code class="language-plaintext highlighter-rouge">TME</code> is complete, run <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> with <code class="language-plaintext highlighter-rouge">order=0</code> and the same band ranges. Make sure to also point to the energy tables with <code class="language-plaintext highlighter-rouge">energyTableDir</code>, the <code class="language-plaintext highlighter-rouge">TME</code> output with <code class="language-plaintext highlighter-rouge">matrixElementDir</code>, and the <code class="language-plaintext highlighter-rouge">Sj.out</code> file generated by the <code class="language-plaintext highlighter-rouge">PhononPP</code> code using <code class="language-plaintext highlighter-rouge">SjInput</code>. The key parameters in the <code class="language-plaintext highlighter-rouge">LSF</code> input file are the temperature, time step, and smearing parameters (see the <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> documentation for more information on these parameters). Use</p>
+<p>Once that <code class="language-plaintext highlighter-rouge">TME</code> is complete, run <a href="code_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> with <code class="language-plaintext highlighter-rouge">order=0</code> and the same band ranges. Make sure to also point to the energy tables with <code class="language-plaintext highlighter-rouge">energyTableDir</code>, the <code class="language-plaintext highlighter-rouge">TME</code> output with <code class="language-plaintext highlighter-rouge">matrixElementDir</code>, and the <code class="language-plaintext highlighter-rouge">Sj.out</code> file generated by the <code class="language-plaintext highlighter-rouge">PhononPP</code> code using <code class="language-plaintext highlighter-rouge">SjInput</code>. The key parameters in the <code class="language-plaintext highlighter-rouge">LSF</code> input file are the temperature, time step, and smearing parameters (see the <a href="code_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> documentation for more information on these parameters). Use</p>
 <div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="n">temperature</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span><span class="w">
  </span><span class="n">dt</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="mf">2.1d-9</span><span class="w">
  </span><span class="n">hbarGamma</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w">    </span><span class="c1">! meV</span><span class="w">
  </span><span class="n">smearingExpTolerance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1d-4</span><span class="w">
 </span></code></pre></div></div>
-<p>It is also important to pick out the proper spin channel. For this problem, choose the spin-down channel with <code class="language-plaintext highlighter-rouge">iSpin=1</code>.</p>
+<p>It is also important to pick out the proper spin channel. For this problem, choose the first spin channel with <code class="language-plaintext highlighter-rouge">iSpin=1</code>.</p>
 
 <h2 id="first-order">First-order</h2>
 
-<p>The first-order term is more involved. To calculate the first-order matrix element, the following calculations must be done for each shifted file for the different phonon modes:</p>
+<p>The <a href="first-order-capture.html">first-order term</a> is more involved and much longer (total around 4 days).</p>
+
+<h3 id="tme">TME</h3>
+
+<p>To calculate the first-order matrix element, the following calculations must be done for each shifted file for the different phonon modes:</p>
 <ul>
   <li>VASP SCF calculation</li>
-  <li><a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a></li>
-  <li><a href="calculations_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a></li>
+  <li><a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a></li>
+  <li><a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a></li>
 </ul>
 
-<p>A separate directory must be created for each mode and the shifted <code class="language-plaintext highlighter-rouge">POSCAR</code> must be copied into the directory along with the required VASP files. <strong>Make sure that each folder has padding zeros to make the number 4-digits wide, otherwise there will be issues with reading the files in the <code class="language-plaintext highlighter-rouge">LSF</code> code.</strong> To speed things up, it also helps to copy the <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code> from the unshifted calculation. It is best to set up a bash script to do this rather than manually copying all of the files. If you include copying the <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code>, this will take a long time, so it is best to submit the script to the queue to allow it to run. Here is an example PBS script of how that can be done:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-<span class="c"># Move POSCAR-xxx files from `PhononPP` into individual folders and</span>
-<span class="c"># create a run script for each. You must have INCAR, KPOINTS, and</span>
-<span class="c"># POTCAR files in current directory. If you want to include the </span>
-<span class="c"># WAVECAR and CHGCAR as well, make sure those are present in the </span>
-<span class="c"># current directory or you include the proper path.</span>
-<span class="c">#</span>
-<span class="c"># To run (assuming you call this script `createShiftedDirs.scr`):</span>
-<span class="c"># chmod +x createShiftedDirs.scr</span>
-<span class="c"># qsub createShiftedDirs.scr</span>
-<span class="c">#</span>
-<span class="c">## Required PBS Directives --------------------------------------</span>
-<span class="c">#PBS -A &lt;grant-id&gt;</span>
-<span class="c">#PBS -q standard</span>
-<span class="c">#PBS -l select=3:ncpus=44:mpiprocs=44</span>
-<span class="c">#PBS -l walltime=1:00:00</span>
-<span class="c">#PBS -l place=scatter:excl</span>
+<p>A separate directory must be created for each mode and the shifted <code class="language-plaintext highlighter-rouge">POSCAR</code> must be copied into the directory along with the required VASP files. <strong>Make sure that each folder has padding zeros to make the number 4-digits wide, otherwise there will be issues with reading the files in the <code class="language-plaintext highlighter-rouge">LSF</code> code.</strong> To speed things up, it also helps to copy the <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code> from the unshifted calculation. It is best to set up a bash script to do this rather than manually copying all of the files. If you include copying the <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code>, this will take a long time, so it is best to submit the script to the queue to allow it to run.</p>
 
-<span class="c">## Optional Directives ------------------------------------</span>
-<span class="c">#PBS -N SiVH3_submit</span>
-<span class="c">#PBS -j oe</span>
-<span class="c">#PBS -M &lt;email&gt;</span>
-<span class="c">#PBS -m be</span>
+<h4 id="helper-script-outline">Helper script outline</h4>
 
-<span class="c"># Define parameters</span>
-<span class="nv">BASE_DIR</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">WORKDIR</span><span class="k">}</span><span class="s2">/path/to/your/folder"</span>
-
-<span class="nv">N</span><span class="o">=</span>132
-
-
-<span class="nb">cd</span> <span class="k">${</span><span class="nv">BASE_DIR</span><span class="k">}</span>
-
-
-createDirCopy<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">local </span><span class="nv">i</span><span class="o">=</span><span class="nv">$1</span>
-  <span class="c"># Make folder for each displacement</span>
-  <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-d</span> <span class="s2">"disp-</span><span class="nv">$i</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
-    </span><span class="nb">mkdir </span>disp-<span class="nv">$i</span>
-
-    <span class="c"># Move the displaced POSCAR files to individual</span>
-    <span class="c"># folders as POSCAR</span>
-    <span class="nb">mv </span>ph_POSCAR_<span class="nv">$i</span> disp-<span class="nv">$i</span>/POSCAR
-
-    <span class="c"># Copy in other input files for SCF calculation, Export, and TME</span>
-    <span class="nb">cp </span>INCAR KPOINTS POTCAR WAVECAR CHGCAR SiVH3_export.in TME.in disp-<span class="nv">$i</span>
-
-    <span class="c"># Generate a script to run all 3 in this folder</span>
-    <span class="nb">cat</span> <span class="o">&gt;</span> disp-<span class="nv">$i</span>/run_VASP-Export-TME.scr <span class="o">&lt;&lt;</span> <span class="no">EOF</span><span class="sh">
-#!/bin/bash
-## Required PBS Directives --------------------------------------
-#PBS -A &lt;grant-id&gt;
-#PBS -q standard
-#PBS -l select=6:ncpus=44:mpiprocs=44
-#PBS -l walltime=1:00:00
-#PBS -l place=scatter:excl
-
-## Optional Directives ------------------------------------
-#PBS -N </span><span class="k">${</span><span class="nv">i</span><span class="k">}</span><span class="sh">SiVH3_FOME
-#PBS -j oe
-
-# Define parameters
-BASE_DIR="</span><span class="se">\$</span><span class="sh">{WORKDIR}/path/to/your/folder/disp-</span><span class="k">${</span><span class="nv">i</span><span class="k">}</span><span class="sh">"
-
-## Execution Block -----------------------------------------------
-# Environment Setup
-# cd to base directory in /work
-cd </span><span class="se">\$</span><span class="sh">{BASE_DIR}
-
-# Launching  ----------------------------------------------------
-module unload cray-libsci
-
-echo "Running VASP." &amp;&amp;
-date +"%T" &amp;&amp;
-aprun -n 264 ~/vasp.5.4.4/bin/vasp_std &amp;&amp;
-echo "VASP exited clean. Running Export." &amp;&amp;
-date +"%T" &amp;&amp;
-aprun -n 264 ~/defectCrossSections/bin/Export_VASP.x -nk 1 -nb 4 &lt; SiVH3_export.in &gt; SiVH3_export.out &amp;&amp;
-echo "Export exited clean. Submitting TME." &amp;&amp;
-date +"%T" &amp;&amp;
-aprun -n 264 ~/defectCrossSections/bin/TME.x -nk 1 &lt; TME.in &gt; TME.out &amp;&amp;
-date +"%T"
-</span><span class="no">EOF
-</span>  <span class="k">fi</span>
-<span class="o">}</span>
-
-<span class="k">for </span>i <span class="k">in</span> <span class="o">{</span>0001..1539<span class="o">}</span>
-<span class="k">do
-  </span>createDirCopy <span class="nv">$i</span> &amp;
-
-  <span class="k">if</span> <span class="o">[[</span> <span class="si">$(</span><span class="nb">jobs</span> <span class="nt">-r</span> <span class="nt">-p</span> | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span> <span class="nt">-ge</span> <span class="nv">$N</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
-    </span><span class="nb">wait</span> <span class="nt">-n</span>
-  <span class="k">fi
-done
-</span><span class="nb">wait</span>
-</code></pre></div></div>
-
-<p>This script will utilize multiple processes to copy the directories faster. You can edit this script or create others for submitting the scripts, checking their status, copying the output, etc. This is a huge calculation (total of 4ish days), and it requires checking on the calculations regularly. I would highly suggest using <a href="https://chat.openai.com/" target="_blank">ChatGPT</a> to help generate any scripts if you are not familiar with bash scripting, but beware that you will still need to check the results from ChatGPT as it is not always completely accurate.</p>
-
-<p>Some tips for running these calculations:</p>
+<p>I utilized a <a href="https://github.com/laurarnichols/defectCrossSections/blob/daa793dac9d4ea30617e40ddfb8eb04ad5cdfce8/Tools/firstOrderHelper.scr" target="_blank">bash script</a> (used on NERSC’s Perlmutter) with different functions for different processes (more details below):</p>
 <ul>
-  <li>Track which ones are complete in a spreadsheet or something similar.</li>
-  <li>You can run these calculations on multiple machines if you have access to speed things up.</li>
-  <li>If you run on multiple machines, make sure to track which calculations are on which machine (they will all need to be gathered on one machine at some point).</li>
-  <li>Use <code class="language-plaintext highlighter-rouge">wc -l</code> on the output files to check that the calculations finished (use a calculation you know completed as reference).</li>
+  <li><code class="language-plaintext highlighter-rouge">submitVASP</code>
+    <ul>
+      <li>Set up the displacement directories</li>
+      <li>Copy needed files for VASP calculation into folder</li>
+      <li>Generate a VASP run script with the job labeled by the mode number</li>
+      <li>Submit VASP</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">clean</code>
+    <ul>
+      <li>Change into a displacement directory and delete all files and the <code class="language-plaintext highlighter-rouge">export</code> folder</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">submitAll</code>
+    <ul>
+      <li>Do everything as in <code class="language-plaintext highlighter-rouge">submitVASP</code></li>
+      <li>Also copy the input file for <code class="language-plaintext highlighter-rouge">Export</code> and generate the input file for <code class="language-plaintext highlighter-rouge">TME</code></li>
+      <li>Create and submit a script to run VASP, <code class="language-plaintext highlighter-rouge">Export</code>, and <code class="language-plaintext highlighter-rouge">TME</code>, with the latter two only running if the previous calculation submitted without errors</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">submitExportAndTME</code>
+    <ul>
+      <li>Copy and generate <code class="language-plaintext highlighter-rouge">Export</code> and <code class="language-plaintext highlighter-rouge">TME</code> input files</li>
+      <li>Create and submit a script to run <code class="language-plaintext highlighter-rouge">Export</code> then <code class="language-plaintext highlighter-rouge">TME</code> if <code class="language-plaintext highlighter-rouge">Export</code> completes properly</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">cleanForResubmit</code>
+    <ul>
+      <li>Remove all files and folders from a displacement directory</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">getShiftedOverlaps</code>
+    <ul>
+      <li>Copy the header from the original <code class="language-plaintext highlighter-rouge">TME</code> output file</li>
+      <li>Get $\delta q_j$ displacement from the <code class="language-plaintext highlighter-rouge">dq.txt</code> file</li>
+      <li>Paste together into a temporary file the data needed to calculate a corrected matrix element:
+        <ul>
+          <li>Overlap squared from displaced calculation</li>
+          <li>Overlap squared from non-displaced calculation (baseline)</li>
+          <li>First-order eigenvalue difference</li>
+          <li>Displacement for this mode (repeated for every band)</li>
+        </ul>
+      </li>
+      <li>Recalculate the matrix element and put into a temporary file</li>
+      <li>Get all of the data from the original <code class="language-plaintext highlighter-rouge">TME</code> output file but replace the matrix element column with the corrected matrix element from the temporary file</li>
+    </ul>
+  </li>
 </ul>
 
-<p>Once all of the first-order matrix elements are complete, run <a href="calculations_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> with <code class="language-plaintext highlighter-rouge">order=1</code> and the same parameters as in the zeroth-order term. <code class="language-plaintext highlighter-rouge">matrixElementDir</code> should be set to the folder used for the matrix-element output in each subfolder (usually <code class="language-plaintext highlighter-rouge">TME</code>). <code class="language-plaintext highlighter-rouge">MjBaseDir</code> should be set to the main folder that all of the displaced-calculation folders are in. <code class="language-plaintext highlighter-rouge">prefix</code> should be set to the prefix of each subdirectory (usually <code class="language-plaintext highlighter-rouge">disp-</code>).</p>
+<p>The loop at the bottom of the file allows the above functions to be run for multiple modes (make sure to use leading zeros to match the file names). When copying over wave functions and charge densities to submit VASP calculations for multiple modes, make sure to submit the script to the queue.</p>
+
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Make sure to be considerate of the machine you are working on. Do not abuse the debug queue or submit too many calculations at once (I maxed out around 250). Do not take up too much storage space. Make sure to delete the VASP and <code class="language-plaintext highlighter-rouge">Export</code> files when you are sure <code class="language-plaintext highlighter-rouge">TME</code> is complete. These calculations are huge, and you do not want to get throttled or lose your access because of bad practices.</div>
+
+<h4 id="ideal-workflow">Ideal workflow</h4>
+
+<p>The ideal workflow would be to use <code class="language-plaintext highlighter-rouge">submitAll</code> to submit all calculations and just track them as they finish. You can tell the <code class="language-plaintext highlighter-rouge">Export</code> and <code class="language-plaintext highlighter-rouge">TME</code> codes are finished by looking for a line like</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>************ VASP Export complete! (     35.01 secs) ************
+</code></pre></div></div>
+<p>for <code class="language-plaintext highlighter-rouge">Export</code> or</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-----------------------------------------------------------------
+ Total time needed:                              63.02 secs.
+</code></pre></div></div>
+<p>for <code class="language-plaintext highlighter-rouge">TME</code>. However, there are a few things that require active monitoring.</p>
+
+<h4 id="confirm-calculations-were-successful">Confirm calculations were successful</h4>
+
+<p>Sometimes something will be wrong with the machine that will cause calculations to hang or die, so you need to double-check that each of the calculations finished correctly. I did this using a few different commands to search through the output files.</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">General timing</code> in the VASP <code class="language-plaintext highlighter-rouge">OUTCAR</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Export complete</code> in the <code class="language-plaintext highlighter-rouge">Export</code> standard out file</li>
+  <li><code class="language-plaintext highlighter-rouge">Total time</code> in the <code class="language-plaintext highlighter-rouge">TME</code> standard out file</li>
+</ul>
+
+<p>The presence of those lines means that each calculation completed successfully. It is not feasible to look through every file individually if you are doing many modes, so it is best to use the command line to process the files.</p>
+
+<p>As an example, in the ideal workflow, VASP, <code class="language-plaintext highlighter-rouge">Export</code>, and <code class="language-plaintext highlighter-rouge">TME</code> would all be run one after the other. I would start with checking 100 files at a time to see if <code class="language-plaintext highlighter-rouge">TME</code> completed.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="s2">"Total time"</span> disp-00<span class="k">*</span>/TME.out | <span class="nb">wc</span> <span class="nt">-l</span>
+</code></pre></div></div>
+<p>The <code class="language-plaintext highlighter-rouge">grep</code> command searches for the phrase in a given path. Specifying <code class="language-plaintext highlighter-rouge">disp-00*</code> means that the first 99 directories (only 99 for <code class="language-plaintext highlighter-rouge">00</code> because there is no mode <code class="language-plaintext highlighter-rouge">0</code>) will be searched. The <code class="language-plaintext highlighter-rouge">wc -l</code> gets the line count from the output, representing in how many files the line was found. If the number represents all of the files searche by the wildcard, you can mark all of those modes as complete. If not, search by tens (e.g., <code class="language-plaintext highlighter-rouge">disp-001*</code>) to narrow down which files did not complete properly. If a group of ten is not all complete, you can remove the <code class="language-plaintext highlighter-rouge">| wc -l</code> part to list all of the results and show which modes completed properly.</p>
+
+<p><strong>I would highly recommend using a spreadsheet or something similar to track the status of the matrix elements for all of the modes.</strong></p>
+
+<h4 id="shifted-overlaps">Shifted overlaps</h4>
+
+<p>The first-order term utilizes an overlap between the displaced and non-displaced defect wave functions (ground state/initial positions). In principle, the non-displaced wave functions should be zero, but they are not numerically zero, so we must subtract them from the displaced overlap in order to have a more-accurate derivative for the first-order term.</p>
+
+<p>The results for the paper used a version of the <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code that did not have the ability to subtract out a baseline for the overlaps (I’m planning on implementing this soon), so I had to manually subtract out the baseline using my helper script. Even when the baseline is implemented in the <code class="language-plaintext highlighter-rouge">TME</code> code, I will leave the script I used to shift them and update the energies so that you can use it to edit your matrix elements in post-processing if needed, rather than having to redo all of the calculations. I would highly suggest using <a href="https://chat.openai.com/" target="_blank">ChatGPT</a> to help generate any scripts you need if you are not familiar with bash scripting, but beware that you will still need to check the results from ChatGPT as it is not always completely accurate.</p>
+
+<h3 id="lsf">LSF</h3>
+
+<p>Once all of the first-order matrix elements are complete, run <a href="code_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> with <code class="language-plaintext highlighter-rouge">order=1</code> and the same parameters as in the zeroth-order term. <code class="language-plaintext highlighter-rouge">matrixElementDir</code> should be set to the folder used for the matrix-element output in each subfolder (usually <code class="language-plaintext highlighter-rouge">TME</code>). <code class="language-plaintext highlighter-rouge">MjBaseDir</code> should be set to the main folder that all of the displaced-calculation folders are in. <code class="language-plaintext highlighter-rouge">prefix</code> should be set to the prefix of each subdirectory (usually <code class="language-plaintext highlighter-rouge">disp-</code>).</p>
 
 <h2 id="group-velocity">Group velocity</h2>
 
 <p>The results from the LSF code give you the transition rate, but the transition rate can be converted to a cross section using</p>
 
-\[\sigma = \frac{\Gamma \Omega}{v_g},\]
+\[\sigma_i = \frac{\Gamma_i \Omega}{v_g^{(i)}},\]
 
-<p>where $\Gamma$ is the transition rate, $\Omega$ is the supercell volume, and $v_g$ is the group velocity.</p>
+<p>where $\Gamma_i$ is the transition rate, $\Omega$ is the supercell volume, and $v_g^{(i)}$ is the group velocity for the perfect-crystal band state $i$.</p>
 
 <p>To accurately get the group velocity, it is best to utilize the equation</p>
 
-\[v_{gi} = \frac{1}{\hbar} \frac{\partial E}{\partial k_i},\]
+\[v_{gx}^{(i)} = \frac{1}{\hbar} \frac{\partial E_i}{\partial k_x},\]
 
-<p>where $i$ is the $x,y,z$ index, then use</p>
+<p>for each direction $x,y,z$, then use</p>
 
 \[||v_g|| =  \sqrt{v_{gx}^2 + v_{gy}^2 + v_{gz}^2}\]
 
-<p>to combine the components. To practically calculate this, we must get the perfect-crystal energy bands at k-points slightly offset from the base k-point and calculate the slope of the bands. You only need two points to determine a slope, but there are often band crossings. Often, three points (center and $\pm$) is enough to connect straight lines, but sometimes the bands are curved and using straight lines would give incorrect results. To be safe, 5 points should be used in each coordinate direction so that it is clear how the points should be connected and how the slope should be calculated.</p>
+<p>to combine the components. To practically calculate this, we must get the perfect-crystal energy bands at k-points slightly offset from the base k-point and calculate the slope of the bands. You only need two points to determine a slope, but there are often band crossings. Often, three points (center and $\pm$) is enough to connect straight lines, but sometimes the bands are curved and using straight lines would give incorrect results. To be safe, 4 points should be used in each coordinate direction so that it is clear how the points should be connected and how the slope should be calculated.</p>
 
 <p>As an example, consider the <code class="language-plaintext highlighter-rouge">KPOINTS</code> file centered at the <code class="language-plaintext highlighter-rouge">0.000000 0.000000 0.000000</code> k-point (in direct coordinates):</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Explicit k-points
-13
+10
 Direct
  0.000000  0.000000  0.000000  1
--0.020000  0.000000  0.000000  0
 -0.010000  0.000000  0.000000  0
  0.010000  0.000000  0.000000  0
  0.020000  0.000000  0.000000  0
- 0.000000 -0.020000  0.000000  0
  0.000000 -0.010000  0.000000  0
  0.000000  0.010000  0.000000  0
  0.000000  0.020000  0.000000  0
- 0.000000  0.000000 -0.020000  0
  0.000000  0.000000 -0.010000  0
  0.000000  0.000000  0.010000  0
  0.000000  0.000000  0.020000  0
 
 </code></pre></div></div>
-<p>The main k-point is the only one with any weight to speed up the calculations. Each direction contains two negatively-displaced k-points, two positively-displaced k-points, and the center k-point. Run an SCF calculation on the perfect crystal supercell with the given set of k-points.</p>
+<p>The main k-point is the only one with any weight to speed up the calculations. Each direction contains one negatively-displaced k-point, two positively-displaced k-points, and the center k-point. Run an SCF calculation on the perfect crystal supercell with the given set of k-points.</p>
 
-<p>Once that calculation is complete, you need to gather the eigenvalues for plotting so that you can manually determine how the bands should line up. You can do this manually by looking at the <code class="language-plaintext highlighter-rouge">EIGENVAL</code> file, or you can use the <a href="calculations_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> code. To do this, use the following options:</p>
+<p>Once that calculation is complete, you need to gather the eigenvalues for plotting so that you can manually determine how the bands should line up. You can do this manually by looking at the <code class="language-plaintext highlighter-rouge">EIGENVAL</code> file, or you can use the <a href="code_export.html"><code class="language-plaintext highlighter-rouge">Export</code></a> code. To do this, use the following options:</p>
 <div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">energiesOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.true.</span><span class="w">
 </span><span class="n">groupForGroupVelocity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.true.</span><span class="w">
-</span><span class="n">nDispkPerCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w">
-</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'-0.02 -0.01 0.01 0.02'</span><span class="w">
+</span><span class="n">nDispkPerCoord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'-0.01 0.01 0.02'</span><span class="w">
 </span></code></pre></div></div>
 <p>The <code class="language-plaintext highlighter-rouge">Export</code> code assumes that the base k-point is first in the list and that the displacement pattern for each coordinate is consistent. It does not matter what order you do the displacement in, as long as the pattern is consistent for each coordinate and it matches the <code class="language-plaintext highlighter-rouge">pattern</code> variable in the input file. <code class="language-plaintext highlighter-rouge">pattern</code> should have <code class="language-plaintext highlighter-rouge">nDispkPerCoord</code> numbers in a string. The velocities will be sorted and output from negative to positive (including the base k-point) for each coordinate in files like <code class="language-plaintext highlighter-rouge">groupedEigenvaluesX.isp.ik</code>.</p>
 
-<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> There are symmetry considerations for calculating the group velocity at the gamma point. I do not know how this was done, but Guanzhi is supposed to be writing up documentation on this process.</div>
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> There are symmetry considerations for calculating the group velocity at the $\Gamma$ point. I do not know how this was done, but Guanzhi is supposed to be writing up documentation on this process.</div>
+
+<p>I created a <a href="https://github.com/laurarnichols/CrossSectionCalculations/blob/4dc5181bff428e8244c92048b9ff0726454181d0/SiVH3/GaNPaper/VASPandExport/pristine/groupVelocity/GroupVelocity.ipynb" target="_blank">jupyter notebook</a> to help speed up the process of lining up bands and calculating the slope. You will need to manually swap bands at the different k-points so that each band is a smooth curve. You will need to do this for each direction $x,y,z$. You may also need to swap some bands across the coordinates so that the total velocity $v_g^{(i)}$ is the same for all bands within a degeneracy group.</p>
+
+<h2 id="smearing-and-plotting">Smearing and plotting</h2>
+
+<p>Finally, the results must be smeared based on the group velocity to produce a smooth curve as a function of energy. I created a <a href="https://github.com/laurarnichols/CrossSectionCalculations/blob/4dc5181bff428e8244c92048b9ff0726454181d0/SiVH3/GaNPaper/results/SmearCrossSectionWithVg.ipynb" target="_blank">jupyter notebook</a> to plot the smeared cross section and also explore the different elements that go into the results.</p>
 
 
 
@@ -724,7 +714,7 @@ Direct
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Sep 21, 2023 <br />
+ Site last generated: Dec 19, 2023 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>

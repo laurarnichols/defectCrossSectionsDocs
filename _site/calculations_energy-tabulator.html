@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Include a summary of this page.">
+<meta name="description" content="This page gives an overview of the energies required in the theory and how to run the EnergyTabulator code.">
 <meta name="keywords" content="energy-tabulator,  energy">
 <title>Energy Tabulator Calculations | Defect Cross Sections</title>
 <link rel="stylesheet" href="css/syntax.css">
@@ -259,14 +259,7 @@
           
           
           
-          <li><a title="VASP" href="vasp.html">VASP</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Export" href="calculations_export.html">Export</a></li>
+          <li><a title="VASP and Export" href="vasp-and-export.html">VASP and Export</a></li>
           
           
           
@@ -294,14 +287,14 @@
           
           
           
-          <li><a title="TME" href="calculations_tme.html">TME</a></li>
+          <li><a title="Zeroth-order capture" href="zeroth-order-capture.html">Zeroth-order capture</a></li>
           
           
           
           
           
           
-          <li><a title="LSF" href="calculations_lsf.html">LSF</a></li>
+          <li><a title="First-order capture" href="first-order-capture.html">First-order capture</a></li>
           
           
           
@@ -382,7 +375,7 @@
 <div class="post-content">
 
    
-    <div class="summary">Include a summary of this page.</div>
+    <div class="summary">This page gives an overview of the energies required in the theory and how to run the EnergyTabulator code.</div>
    
 
     
@@ -415,7 +408,58 @@ $('#toc').on('click', 'a', function() {
 
     
 
-   <p>Add content.</p>
+   <h2 id="energies-needed">Energies needed</h2>
+
+<p>There are four energies calculated in the <a href="code_energy-tabulator.html"><code class="language-plaintext highlighter-rouge">EnergyTabulator</code></a> code: delta function, zeroth-order, first-order, and plotting.</p>
+
+<p>The delta-function energy must represent the total energy needed to be dissipated through phonons to satisfy conservation of energy. Because we consider nonradiative transitions, this energy must be the electronic energy plus the relaxation energy. The zeroth-order term requires an electronic-only total energy difference, while the first-order term uses an electronic eigenvalue difference. We chose to plot the cross section as a function of the electronic-only total energy difference (from the zeroth-order term) in eV.</p>
+
+<h2 id="inputs">Inputs</h2>
+<p>The input file looks like</p>
+
+<div class="language-fortran highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&amp;</span><span class="n">inputParams</span><span class="w">
+  </span><span class="c1">! System used for eigenvalues</span><span class="w">
+  </span><span class="n">exportDirEigs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'path-to-system-export-for-eigenvalues'</span><span class="w">
+
+  </span><span class="c1">! Systems used for total energy differences</span><span class="w">
+  </span><span class="n">exportDirInitInit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'path-to-relaxed-initial-charge-state-export'</span><span class="w">
+  </span><span class="n">exportDirFinalInit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'path-to-final-charge-state-initial-positions-export'</span><span class="w">
+  </span><span class="n">exportDirFinalFinal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'path-to-relaxed-final-charge-state-export'</span><span class="w">
+
+  </span><span class="c1">! Physical problem details</span><span class="w">
+  </span><span class="n">captured</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.true.</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="kc">.false.</span><span class="w">      </span><span class="c1">! If the carrier is captured</span><span class="w">
+  </span><span class="n">elecCarrier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">.true.</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="kc">.false.</span><span class="w">   </span><span class="c1">! If the carrier is an electron (vs a hole)</span><span class="w">
+
+  </span><span class="c1">! Parameters for change in energy</span><span class="w">
+  </span><span class="n">eCorrectTot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">real</span><span class="w">				  </span><span class="c1">! size of total-energy correction in eV; default 0.0</span><span class="w">
+  </span><span class="n">eCorrectEigRef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">real</span><span class="w">			  </span><span class="c1">! size of correction to eig diff to ref carrier in eV; default 0.0</span><span class="w">
+  </span><span class="n">refBand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">integer</span><span class="w">						</span><span class="c1">! band location of WZP reference carrier</span><span class="w">
+  
+  </span><span class="c1">! Band range for overlaps</span><span class="w">
+  </span><span class="n">iBandIinit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">integer</span><span class="w">						</span><span class="c1">! lowest initial-state band</span><span class="w">
+  </span><span class="n">iBandIfinal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">integer</span><span class="w">						</span><span class="c1">! highest initial-state band</span><span class="w">
+  </span><span class="n">iBandFinit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">integer</span><span class="w">						</span><span class="c1">! lowest final-state band</span><span class="w">
+  </span><span class="n">iBandFfinal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">integer</span><span class="w">						</span><span class="c1">! highest final-state band</span><span class="w">
+  
+  </span><span class="c1">! Output info</span><span class="w">
+  </span><span class="n">energyTableDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'path-to-store-energy-tables'</span><span class="w"> 			</span><span class="c1">! default './'</span><span class="w">
+</span><span class="p">/</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Some things to keep in mind:</p>
+<ul>
+  <li>The eigenvalues should come from a ground-state calculation because those are the most accurate.</li>
+  <li>The eigenvalue system should reflect the max number of k-points between the zeroth- and first-order terms.</li>
+  <li>The total energies should ideally come from HSE calculations.</li>
+  <li>If PBE energies must be used, there is the ability to add corrections to the total energies and the eigenvalue of the reference state (where the WZP carrier is placed).</li>
+  <li>The energies are always in terms of the actual electron that is transitioning (not the hole if that is the carrier).</li>
+</ul>
+
+<h2 id="outputs">Outputs</h2>
+
+<p>An <code class="language-plaintext highlighter-rouge">energyTable.isp.ik</code> file is output for each spin and k-point in the system. The header includes the band limits for the initial and final states and the total energies used in the delta-function and zeroth-order energies.</p>
+
+<p>The first two columns of the rest of the data are the indices of the initial and final bands. The delta-function, zeroth-order, first-order, and plotting energies are then all listed in order. All energies are in Hartree besides the plotting energy that is in eV.</p>
 
 
 
@@ -443,7 +487,7 @@ $('#toc').on('click', 'a', function() {
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Sep 21, 2023 <br />
+ Site last generated: Dec 19, 2023 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>
