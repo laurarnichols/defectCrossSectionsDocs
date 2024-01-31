@@ -142,6 +142,13 @@ To calculate the first-order matrix element, the following calculations must be 
 
 A separate directory must be created for each mode and the shifted `POSCAR` must be copied into the directory along with the required VASP files. __Make sure that each folder has padding zeros to make the number 4-digits wide, otherwise there will be issues with reading the files in the `LSF` code.__ To speed things up, it also helps to copy the `WAVECAR` and `CHGCAR` from the unshifted calculation. It is best to set up a bash script to do this rather than manually copying all of the files. If you include copying the `WAVECAR` and `CHGCAR`, this will take a long time, so it is best to submit the script to the queue to allow it to run. 
 
+#### Shifted overlaps
+
+For increased accuracy, it is recommended to first run [`TME`][code_tme] using the nondisplaced system as both inputs to get numbers that represent numerical "orthonormality." This serves as the zero for the displaced overlap; subtracting the baseline will improve the numerical accuracy of the matrix elements. Calculate these overlaps first, then use `subtractBaseline = .true.` and include the path to the basline overlaps in `baselineDir`.
+
+The results for the paper used a version of the [`TME`][code_TME] code that did not have the ability to subtract out a baseline for the overlaps (now implemented), so I had to manually subtract out the baseline using my helper script. I left the script I originally used to shift the matrix elements in case it might be helpful as a starting point to do some post-processing in the future because the first-order matrix elements are very costly to repeat. I would highly suggest using [ChatGPT](https://chat.openai.com/){:target="_blank"} to help generate any scripts you need if you are not familiar with bash scripting, but beware that you will still need to check the results from ChatGPT as it is not always completely accurate. 
+
+
 #### Helper script outline
 
 I utilized a [bash script](https://github.com/laurarnichols/defectCrossSections/blob/daa793dac9d4ea30617e40ddfb8eb04ad5cdfce8/Tools/firstOrderHelper.scr){:target="_blank"} (used on NERSC's Perlmutter) with different functions for different processes (more details below):
@@ -205,12 +212,6 @@ grep "Total time" disp-00*/TME.out | wc -l
 The `grep` command searches for the phrase in a given path. Specifying `disp-00*` means that the first 99 directories (only 99 for `00` because there is no mode `0`) will be searched. The `wc -l` gets the line count from the output, representing in how many files the line was found. If the number represents all of the files searche by the wildcard, you can mark all of those modes as complete. If not, search by tens (e.g., `disp-001*`) to narrow down which files did not complete properly. If a group of ten is not all complete, you can remove the `| wc -l` part to list all of the results and show which modes completed properly. 
 
 __I would highly recommend using a spreadsheet or something similar to track the status of the matrix elements for all of the modes.__
-
-#### Shifted overlaps
-
-The first-order term utilizes an overlap between the displaced and non-displaced defect wave functions (ground state/initial positions). In principle, the non-displaced wave functions should be zero, but they are not numerically zero, so we must subtract them from the displaced overlap in order to have a more-accurate derivative for the first-order term.
-
-The results for the paper used a version of the [`TME`][code_TME] code that did not have the ability to subtract out a baseline for the overlaps (I'm planning on implementing this soon), so I had to manually subtract out the baseline using my helper script. Even when the baseline is implemented in the `TME` code, I will leave the script I used to shift them and update the energies so that you can use it to edit your matrix elements in post-processing if needed, rather than having to redo all of the calculations. I would highly suggest using [ChatGPT](https://chat.openai.com/){:target="_blank"} to help generate any scripts you need if you are not familiar with bash scripting, but beware that you will still need to check the results from ChatGPT as it is not always completely accurate. 
 
 ### LSF
 

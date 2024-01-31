@@ -542,6 +542,12 @@ Direct
 
 <p>A separate directory must be created for each mode and the shifted <code class="language-plaintext highlighter-rouge">POSCAR</code> must be copied into the directory along with the required VASP files. <strong>Make sure that each folder has padding zeros to make the number 4-digits wide, otherwise there will be issues with reading the files in the <code class="language-plaintext highlighter-rouge">LSF</code> code.</strong> To speed things up, it also helps to copy the <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code> from the unshifted calculation. It is best to set up a bash script to do this rather than manually copying all of the files. If you include copying the <code class="language-plaintext highlighter-rouge">WAVECAR</code> and <code class="language-plaintext highlighter-rouge">CHGCAR</code>, this will take a long time, so it is best to submit the script to the queue to allow it to run.</p>
 
+<h4 id="shifted-overlaps">Shifted overlaps</h4>
+
+<p>For increased accuracy, it is recommended to first run <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> using the nondisplaced system as both inputs to get numbers that represent numerical “orthonormality.” This serves as the zero for the displaced overlap; subtracting the baseline will improve the numerical accuracy of the matrix elements. Calculate these overlaps first, then use <code class="language-plaintext highlighter-rouge">subtractBaseline = .true.</code> and include the path to the basline overlaps in <code class="language-plaintext highlighter-rouge">baselineDir</code>.</p>
+
+<p>The results for the paper used a version of the <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code that did not have the ability to subtract out a baseline for the overlaps (now implemented), so I had to manually subtract out the baseline using my helper script. I left the script I originally used to shift the matrix elements in case it might be helpful as a starting point to do some post-processing in the future because the first-order matrix elements are very costly to repeat. I would highly suggest using <a href="https://chat.openai.com/" target="_blank">ChatGPT</a> to help generate any scripts you need if you are not familiar with bash scripting, but beware that you will still need to check the results from ChatGPT as it is not always completely accurate.</p>
+
 <h4 id="helper-script-outline">Helper script outline</h4>
 
 <p>I utilized a <a href="https://github.com/laurarnichols/defectCrossSections/blob/daa793dac9d4ea30617e40ddfb8eb04ad5cdfce8/Tools/firstOrderHelper.scr" target="_blank">bash script</a> (used on NERSC’s Perlmutter) with different functions for different processes (more details below):</p>
@@ -628,12 +634,6 @@ Direct
 
 <p><strong>I would highly recommend using a spreadsheet or something similar to track the status of the matrix elements for all of the modes.</strong></p>
 
-<h4 id="shifted-overlaps">Shifted overlaps</h4>
-
-<p>The first-order term utilizes an overlap between the displaced and non-displaced defect wave functions (ground state/initial positions). In principle, the non-displaced wave functions should be zero, but they are not numerically zero, so we must subtract them from the displaced overlap in order to have a more-accurate derivative for the first-order term.</p>
-
-<p>The results for the paper used a version of the <a href="code_tme.html"><code class="language-plaintext highlighter-rouge">TME</code></a> code that did not have the ability to subtract out a baseline for the overlaps (I’m planning on implementing this soon), so I had to manually subtract out the baseline using my helper script. Even when the baseline is implemented in the <code class="language-plaintext highlighter-rouge">TME</code> code, I will leave the script I used to shift them and update the energies so that you can use it to edit your matrix elements in post-processing if needed, rather than having to redo all of the calculations. I would highly suggest using <a href="https://chat.openai.com/" target="_blank">ChatGPT</a> to help generate any scripts you need if you are not familiar with bash scripting, but beware that you will still need to check the results from ChatGPT as it is not always completely accurate.</p>
-
 <h3 id="lsf">LSF</h3>
 
 <p>Once all of the first-order matrix elements are complete, run <a href="code_lsf.html"><code class="language-plaintext highlighter-rouge">LSF</code></a> with <code class="language-plaintext highlighter-rouge">order=1</code> and the same parameters as in the zeroth-order term. <code class="language-plaintext highlighter-rouge">matrixElementDir</code> should be set to the folder used for the matrix-element output in each subfolder (usually <code class="language-plaintext highlighter-rouge">TME</code>). <code class="language-plaintext highlighter-rouge">MjBaseDir</code> should be set to the main folder that all of the displaced-calculation folders are in. <code class="language-plaintext highlighter-rouge">prefix</code> should be set to the prefix of each subdirectory (usually <code class="language-plaintext highlighter-rouge">disp-</code>).</p>
@@ -713,8 +713,8 @@ Direct
 <footer>
             <div class="row">
                 <div class="col-lg-12 footer">
-               &copy;2023 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
- Site last generated: Dec 19, 2023 <br />
+               &copy;2024 Pantelides-group and Zhang-group collaboration. All rights reserved. <br />
+ Site last generated: Jan 30, 2024 <br />
 <!--<p><img src="images/company_logo.png" alt="Company logo"/></p>-->
                 </div>
             </div>
