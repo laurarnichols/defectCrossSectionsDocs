@@ -83,7 +83,11 @@ FERDO = 1022*1 1 0 0.5 535*0
 ```
 `FERWE` sets the spin-up occupations and `FERDO` sets the spin-down occupations. The numbers given are for a choice of 1560 bands. Make sure that your number of bands aligns with your [parallelization criteria](vasp-and-export.html#ncore), otherwise VASP may automatically adjust it, messing up the manual occupations. I like to have the band extrema and the defect levels written explicitly for easier visualization in different files, but that is not required. Note that the excited electron is split across the spin channels to remove any artificial spin-orbit coupling with the defect.
 8. Use the relaxed positive-charge state positions and run a ground-state SCF calculation with the same parameters as the pristine SCF calculation.
-9. [`Export`](vasp-and-export.html#export) the pristine supercell calculation and the ground-state-defect/positive-state-positions to get the wave functions for the zeroth-order term (you only need to set `VASPDir` and `exportDir` for these calculations).
+9. [`Export`](vasp-and-export.html#export) the pristine supercell calculation and the ground-state-defect/positive-state-positions to get the wave functions for the zeroth-order term (you only need to set `VASPDir` and `exportDir` for these calculations). 
+
+{% include note.html content="In all calculations with our code, it is recommended to select a single spin channel using `ispSelect` if you don't need both, as in the case of capture. For the positive-to-neutral transition of this defect in Si, use spin channel 1." %}
+
+
 
 To get the total energies, also do HSE SCF calculations for the relaxed positive charge state, the relaxed ground state, and the ground state at the positive relaxed positions. The gamma-only version of VASP can be used since we only need the energies. [`Export`](calculations_export) the HSE results with the option `energiesOnly = .true.` and `gammaOnly =.true.`, if applicable. 
 
